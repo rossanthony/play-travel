@@ -12,4 +12,12 @@ test-result
 server.pid
 *.eml
 /dist/
-.cache
+*.cache
+bower_components
+
+# intellij
+*.iml
+*.ipr
+*.iws
+.idea
+out

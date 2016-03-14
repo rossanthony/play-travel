@@ -11,11 +11,16 @@ import play.travel.models.{UserTable, User}
 import scala.slick.lifted.TableQuery
 
 
+case class FindEntityByEmail(email: String)
+
 class UserActor extends BaseActor {
 
   val UserQuery = TableQuery[UserTable]
 
   override def receive: Receive = {
+
+    case FindEntityByEmail(email: String) =>
+      sender ! findByEmail(Option(email))
     case ListEntities() =>
       sender ! list()
     case CreateEntity(user: User) =>
@@ -26,6 +31,19 @@ class UserActor extends BaseActor {
       sender ! read(id)
     case UpdateEntity(user: User) =>
       sender ! update(user)
+  }
+
+  /**
+    * Lists all entities
+    * @return
+    */
+  def findByEmail(email: Option[String]): Option[User] = {
+    email match {
+      case Some(s) => DB.withSession { implicit session: Session =>
+          UserQuery.filter(_.email === email).firstOption
+        }
+      case None => None
+    }
   }
 
   /**

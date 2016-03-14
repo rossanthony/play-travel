@@ -21,7 +21,6 @@ class FlightTable(tag: Tag) extends Table[Flight](tag, "FLIGHT") {
   def arrivalTime = column[Int]("arrivalTime", O.NotNull)
   def economyCost = column[Int]("economyCost", O.NotNull)
   def businessCost = column[Int]("businessCost", O.NotNull)
-  
 
   def * = (id.?, flightNumber, airlineCode, airlineName, departureLocation, departureDay, departureTime, arrivalLocation, arrivalDay, arrivalTime, economyCost, businessCost) <> ((Flight.apply _).tupled, Flight.unapply _)
 }

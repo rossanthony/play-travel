@@ -2,19 +2,26 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
+# Home page
 GET        /                    play.travel.controllers.MainController.index()
 
 # Map static resources from the /public folder to the /assets URL path
 GET        /assets/*file        controllers.Assets.at(path="/public", file)
 
+# Authentication
+POST       /api/login     play.travel.controllers.AuthController.login
+GET        /api/public    play.travel.controllers.AuthController.publicApi
+GET        /api/private   play.travel.controllers.AuthController.privateApi
+GET        /api/admin     play.travel.controllers.AuthController.adminApi
 
+# User CRUD
+GET        /user          play.travel.controllers.UserController.list()
+GET        /user/:id      play.travel.controllers.UserController.read(id: Int)
+DELETE     /user/:id      play.travel.controllers.UserController.delete(id: Int)
+POST       /user          play.travel.controllers.UserController.create()
+PUT        /user          play.travel.controllers.UserController.update()
 
-GET        /user        play.travel.controllers.UserController.list() 
-GET        /user/:id    play.travel.controllers.UserController.read(id: Int) 
-DELETE     /user/:id    play.travel.controllers.UserController.delete(id: Int) 
-POST       /user        play.travel.controllers.UserController.create() 
-PUT        /user        play.travel.controllers.UserController.update() 
-
+# Flight CRUD
 GET        /flight        play.travel.controllers.FlightController.list() 
 GET        /flight/:id    play.travel.controllers.FlightController.read(id: Int) 
 DELETE     /flight/:id    play.travel.controllers.FlightController.delete(id: Int) 

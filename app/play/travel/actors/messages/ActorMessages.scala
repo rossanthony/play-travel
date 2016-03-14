@@ -1,5 +1,7 @@
 package play.travel.actors.messages
 
+
+
   case class ListEntities()
 
   case class CreateEntity[T](entity: T)

@@ -2,28 +2,19 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-# Home page
-GET        /                    play.travel.controllers.MainController.index()
+GET     /                           controllers.HomeController.index
+GET     /login                      controllers.AuthController.index
+
+
+
+# An example controller showing how to use dependency injection
+GET     /count                      controllers.CountController.count
+# An example controller showing how to write asynchronous code
+GET     /message                    controllers.AsyncController.message
 
 # Map static resources from the /public folder to the /assets URL path
-GET        /assets/*file        controllers.Assets.at(path="/public", file)
+GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
 
-# Authentication
-POST       /api/login     play.travel.controllers.AuthController.login
-GET        /api/public    play.travel.controllers.AuthController.publicApi
-GET        /api/private   play.travel.controllers.AuthController.privateApi
-GET        /api/admin     play.travel.controllers.AuthController.adminApi
 
-# User CRUD
-GET        /user          play.travel.controllers.UserController.list()
-GET        /user/:id      play.travel.controllers.UserController.read(id: Int)
-DELETE     /user/:id      play.travel.controllers.UserController.delete(id: Int)
-POST       /user          play.travel.controllers.UserController.create()
-PUT        /user          play.travel.controllers.UserController.update()
-
-# Flight CRUD
-GET        /flight        play.travel.controllers.FlightController.list() 
-GET        /flight/:id    play.travel.controllers.FlightController.read(id: Int) 
-DELETE     /flight/:id    play.travel.controllers.FlightController.delete(id: Int) 
-POST       /flight        play.travel.controllers.FlightController.create() 
-PUT        /flight        play.travel.controllers.FlightController.update() 
+GET   /places               controllers.PlaceController.listPlaces
+POST  /places               controllers.PlaceController.savePlace

@@ -1,0 +1,35 @@
+@*
+* Call the the `main` template with two arguments. The first
+* argument is a `String` with the title of the page, the second
+* argument is an `Html` object containing the body of the page.
+*@
+@main("Welcome to Play Travel") {
+
+    <div layout="row">
+        <div layout="column" flex id="content" role="main">
+            <md-content layout="vertical" flex id="content">
+                <div class="pad-100-hoiz" layout="row" layout-align="center center" layout-fill>
+                    <md-whiteframe class="md-whiteframe-z1" layout="column" flex="30" layout-padding>
+                        <md-content md-theme="default">
+                            <md-input-container>
+                                <label>Email</label>
+                                <input ng-model="user.email">
+                            </md-input-container>
+                            <md-input-container>
+                                <label>Password</label>
+                                <input ng-model="user.password" type="password">
+                            </md-input-container>
+                            <md-input-container layout-align="center center">
+                                <div layout="row" layout-sm="column" layout-margin>
+                                    <md-button class="md-raised" flex="50" flex-sm="100">Login</md-button>
+                                    <md-button class="md-raised md-primary" flex="50" flex-sm="100">Register</md-button>
+                                </div>
+                            </md-input-container>
+                        </md-content>
+                    </md-whiteframe>
+                </div>
+            </md-content>
+        </div>
+    </div>
+
+}

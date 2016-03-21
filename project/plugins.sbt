@@ -1,8 +1,16 @@
+// Comment to get more information during initialization
+logLevel := Level.Warn
+
+resolvers += "Typesafe repository" at "http://repo.typesafe.com/typesafe/releases/"
+
+resolvers += "Sonatype snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/"
+
+resolvers += "Scalaz Bintray" at "https://dl.bintray.com/scalaz/releases"
+
 // The Play plugin
 addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.5.0")
 
 // web plugins
-
 addSbtPlugin("com.typesafe.sbt" % "sbt-coffeescript" % "1.0.0")
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-less" % "1.1.0")

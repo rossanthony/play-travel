@@ -2,19 +2,39 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-GET     /                           controllers.HomeController.index
-GET     /login                      controllers.AuthController.index
+# Defining REST endpoints first
+#GET     /api/user                      controllers.UserController.index
+#GET     /api/user/:id                  controllers.UserController.getUser(id: Int)
+#POST    /api/user                      controllers.UserController.addUser
+#DELETE  /api/user/:id                  controllers.UserController.deleteUser(id: Int)
+#
+#POST    /api/auth                       controllers.AuthController.login
+
+
+GET         /user                            controllers.ApplicationController.user
+GET         /signOut                         controllers.ApplicationController.signOut
+
+POST        /signIn                          controllers.CredentialsAuthController.authenticate
+POST        /signUp                          controllers.SignUpController.signUp
+#GET         /authenticate/:provider          controllers.SocialAuthController.authenticate(provider)
+#POST        /authenticate/:provider          controllers.SocialAuthController.authenticate(provider)
+
+# Dynamic part of the url
+GET         /views/$template<.+>.html        controllers.ApplicationController.view(template)
 
 
 
-# An example controller showing how to use dependency injection
-GET     /count                      controllers.CountController.count
-# An example controller showing how to write asynchronous code
-GET     /message                    controllers.AsyncController.message
+## An example controller showing how to use dependency injection
+#GET     /count                      controllers.CountController.count
+## An example controller showing how to write asynchronous code
+#GET     /message                    controllers.AsyncController.message
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+#GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
 
-GET   /places               controllers.PlaceController.listPlaces
-POST  /places               controllers.PlaceController.savePlace
+# All other front-end routes are handled on the client side by Angular.js
+# therefore we can serve up the default HTML no matter what route is requested.
+GET   /                 controllers.HomeController.index
+GET   /*path            controllers.HomeController.anyPath(path: String)

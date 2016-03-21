@@ -1,19 +1,14 @@
-// Gulp components
-var gulp            = require('gulp'),
-    concat          = require('gulp-concat'),      //concats files
-    uglify          = require('gulp-uglify'),      //minifies js files
-    cssmin          = require('gulp-cssmin'),
-    ngAnnotate      = require('gulp-ng-annotate'), //annotates (angular brakes without this)
-    runSequence     = require('run-sequence'),     //runs gulp tasks in sequence (tasks as array)
-    sass            = require('gulp-sass'),        //sass compiler
-    sourcemaps      = require('gulp-sourcemaps'),  //creates sourcemaps for debugging
-    jsonminify      = require('gulp-jsonminify'),
-    autoprefixer    = require('gulp-autoprefixer'),
-    combineMq       = require('gulp-combine-mq'),
-    stripCssCmts    = require('gulp-strip-css-comments'),
-    shell           = require('gulp-shell'),
-    htmlmin         = require('gulp-htmlmin'),
-    rename          = require("gulp-rename");
+//GUlp components
+var gulp        = require('gulp'),
+    concat      = require('gulp-concat'),      //concats files
+    uglify      = require('gulp-uglify'),      //minifies files
+    ngAnnotate  = require('gulp-ng-annotate'), //annotates (angular brakes without this)
+    minifyCSS   = require('gulp-cssnano'),     //minifies css files
+    runSequence = require('run-sequence'),     //runs gulp tasks in sequence (tasks as array)
+    sass        = require('gulp-sass'),        //sass compiler
+    sourcemaps  = require('gulp-sourcemaps');  //creates sourcemaps for debugging
+    //rename      = require("gulp-rename");
+
 
 /**
  * IF GULP IS TYPED WITH NO OTHER ARGUMENTS THIS WILL BE EXECUTED
@@ -23,9 +18,9 @@ gulp.task('default', function() {
         //everything in square brackets executes in parallel
         //to force sequential execution put your task outside brackets
         [
-            //'vendor-js',
-            //'vendor-css',
-            //'app-js',
+            'vendor-js',
+            'vendor-css',
+            'app-js',
             'app-scss'
         ]
     );
@@ -39,7 +34,7 @@ gulp.task('watch-init', function() {
         //everything in square brackets executes in parallel
         //to force sequential execution put your task outside brackets
         [
-            //'watch-app-js',
+            'watch-app-js',
             'watch-app-css'
         ]
     );
@@ -52,8 +47,45 @@ gulp.task('watch-init', function() {
 gulp.task('vendor-js', function () {
     gulp.src(
         [
-            '',
-            ''
+            'bower_components/angular/angular.min.js',
+            'bower_components/angular-animate/angular-animate.min.js',
+            'bower_components/angular-strap/dist/angular-strap.min.js',
+            'bower_components/angular-strap/dist/angular-strap.tpl.min.js',
+            'bower_components/angular-aria/angular-aria.min.js',
+            'bower_components/angular-cookies/angular-cookies.min.js',
+            'bower_components/angular-loader/angular-loader.min.js',
+            'bower_components/angular-messages/angular-messages.min.js',
+            'bower_components/angular-resource/angular-resource.min.js',
+            'bower_components/angular-sanitize/angular-sanitize.min.js',
+            'bower_components/angular-touch/angular-touch.min.js',
+            'bower_components/satellizer/satellizer.min.js',
+
+            'bower_components/angular-ui-router/release/angular-ui-router.min.js',
+
+            //'node_modules/socket.io-client/socket.io.js',
+            //'bower_components/angular-socket-io/socket.min.js',
+
+            'bower_components/angular-bootstrap/ui-bootstrap.min.js',
+            'bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
+            'bower_components/ui-select/dist/select.min.js',
+
+            'bower_components/angular-toastr/dist/angular-toastr.min.js',
+            'bower_components/angular-toastr/dist/angular-toastr.tpls.min.js',
+
+            'bower_components/angular-material/modules/js/core/core.min.js',
+            'bower_components/angular-material/modules/js/input/input.min.js',
+            'bower_components/angular-material/modules/js/checkbox/checkbox.min.js',
+            'bower_components/angular-material/modules/js/switch/switch.min.js',
+            //'bower_components/angular-material/modules/js/sidenav/sidenav.min.js',
+
+            'bower_components/Chart.js/src/Chart.Core.js',
+            'bower_components/Chart.js/src/Chart.Bar.js',
+            'bower_components/Chart.js/src/Chart.Doughnut.js',
+            'bower_components/Chart.js/src/Chart.Line.js',
+
+            'bower_components/angular-chart.js/dist/angular-chart.min.js',
+
+            'bower_components/angular-loading-bar/build/loading-bar.min.js'
         ]
         )
         .pipe(concat('vendor.min.js'))
@@ -75,6 +107,7 @@ gulp.task('app-js', function () {
 gulp.task('watch-app-js', ['app-js'], function () {
     gulp.watch('js/**/*.js', ['app-js']);
 });
+
 /**
  * END OF JAVASCRIPT RELATED TASKS
  */
@@ -84,17 +117,44 @@ gulp.task('watch-app-js', ['app-js'], function () {
  */
 //compile app specific scss to css
 gulp.task('app-scss', function() {
-    gulp.src('scss/**/*.scss')
+    gulp.src('scss/*.scss')
         .pipe(sourcemaps.init())
-        .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError)) // compile & compress
+        //The onError handler prevents Gulp from crashing when you make a mistake in your SASS
+        //compile & compress
+        .pipe(sass({onError: function(e) { console.log(e); }, outputStyle: 'compressed'}))
         .pipe(concat('app.min.css'))
-        .pipe(combineMq({beautify: false}))
-        .pipe(stripCssCmts({preserve:false}))
+        //make source-maps but put them in a different folder & not include content
         .pipe(sourcemaps.write('maps', {includeContent: false}))
-        .pipe(gulp.dest('../public/stylesheets'));
+        .pipe(gulp.dest('../public/css'));
 });
 
 //watch app specific scss
 gulp.task('watch-app-css', ['app-scss'], function () {
-    gulp.watch('scss/**/*.scss', ['app-scss']);
+    gulp.watch('scss/*.scss', ['app-scss']);
 });
+
+//concat vendor css files MUST BE MINIFIED AT THIS STAGE
+gulp.task('vendor-css', function() {
+
+    gulp.src(
+        [
+            //'bower_components/angular-material/angular-material.min.css',
+            'bower_components/angular-material/modules/js/core/core.min.css',
+            'bower_components/angular-material/modules/js/input/input.min.css',
+            'bower_components/angular-material/modules/js/checkbox/checkbox.min.css',
+            'bower_components/angular-material/modules/js/switch/switch.min.css',
+            //'bower_components/angular-material/modules/js/sidenav/sidenav.min.css',
+            'bower_components/angular-chart.js/dist/angular-chart.css',
+            'bower_components/ui-select/dist/select.min.css',
+            'bower_components/angular-toastr/dist/angular-toastr.min.css',
+            'bower_components/angular-loading-bar/build/loading-bar.min.css',
+            'css/vendor/*.css'
+        ]
+        )
+        .pipe(concat('vendor.min.css'))
+        .pipe(minifyCSS({keepSpecialComments:'*'}))
+        .pipe(gulp.dest('../public/css/'));
+});
+/**
+ * END OF CSS RELATED TASKS
+ */

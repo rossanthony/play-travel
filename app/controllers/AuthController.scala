@@ -1,23 +1,37 @@
-package controllers
-
-import javax.inject._
-import play.api.mvc._
-
-/**
- * This controller creates an `Action` to handle HTTP requests to the
- * application's home page.
- */
-@Singleton
-class AuthController @Inject() extends Controller {
-
-  /**
-   * Create an Action to render an HTML page with a welcome message.
-   * The configuration in the `routes` file means that this method
-   * will be called when the application receives a `GET` request with
-   * a path of `/`.
-   */
-  def index = Action {
-    Ok(views.html.login())
-  }
-
-}
+//package controllers
+//
+//import javax.inject._
+//import play.api.mvc._
+//import play.api.libs.json.Json
+//import models.Credentials
+//import services.UserService
+//import scala.concurrent.ExecutionContext.Implicits.global
+//
+//
+///**
+// * This controller defines the REST endpoints for authentication
+// */
+//@Singleton
+//class AuthController @Inject()(userService: UserService) extends Controller {
+//
+//  def login() = Action.async { implicit request =>
+//    val json = request.body.asJson.get
+//    val creds = json.as[Credentials]
+//    println(creds.email)
+//    println(creds.password)
+//
+//
+//    userService.login(creds) map { user =>
+//      if (user) {
+//        Ok(Json.toJson(Map("status" -> "OK", "message" -> "User successfully logged in")))
+//      } else {
+//        Ok(Json.toJson(Map("status" -> "KO", "message" -> "User not found")))
+//      }
+//    }
+//
+////    userService.listAllUsers map { users =>
+////      Ok(Json.toJson(users))
+////    }
+//  }
+//
+//}

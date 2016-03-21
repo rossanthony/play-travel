@@ -1,7 +1,6 @@
 package controllers
 
 import javax.inject._
-import play.api._
 import play.api.mvc._
 
 /**
@@ -18,7 +17,10 @@ class HomeController @Inject() extends Controller {
    * a path of `/`.
    */
   def index = Action {
-    Ok(views.html.index("Your new application is ready."))
+    Ok(views.html.index())
   }
 
+  def anyPath(path: String) = Action {
+    Ok(views.html.index())
+  }
 }

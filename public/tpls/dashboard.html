@@ -1,0 +1,78 @@
+<div class="panel panel-default">
+    <div class="panel-body form-inline">
+        Displaying statistics from &nbsp;&nbsp;&nbsp;&nbsp;
+        <span class="input-group">
+            <input type="text" class="form-control" uib-datepicker-popup="dd-MM-yyyy" ng-click="datepicker1 = !datepicker1" ng-model="dateFrom" show-weeks="false" is-open="datepicker1" datepicker-options="dateOptions" close-text="Close" />
+            <span class="input-group-btn">
+                <button type="button" class="btn btn-link" ng-click="datepicker1 = !datepicker1" ><i class="fa fa-calendar"></i></button>
+            </span>
+        </span>
+
+        to &nbsp;&nbsp;&nbsp;&nbsp;
+
+        <span class="input-group">
+            <input type="text" class="form-control" uib-datepicker-popup="dd-MM-yyyy" ng-click="datepicker2 = !datepicker2" ng-model="dateTo" show-weeks="false" is-open="datepicker2" datepicker-options="dateOptions" close-text="Close" />
+            <span class="input-group-btn">
+                <button type="button" class="btn btn-link" ng-click="datepicker2 = !datepicker2"><i class="fa fa-calendar"></i></button>
+            </span>
+        </span>
+
+        <button class="btn btn-default btn-sm" ng-disabled="dataLoading" ng-click="(!dataLoading) ? reloadData() : null">
+            <i class="fa fa-refresh" ng-class="{'fa-spin': dataLoading}"></i>
+        </button>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="panel panel-info">
+            <div class="panel-heading">{{charts.binary_nlc.title}}</div>
+            <div class="panel-body">
+                <div charter="charts.binary_nlc"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="panel panel-info">
+            <div class="panel-heading">{{charts.concepts.title}}</div>
+            <div class="panel-body">
+                <div charter="charts.concepts"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="panel panel-info">
+            <div class="panel-heading">{{charts.emotions.title}}</div>
+            <div class="panel-body">
+                <div charter="charts.emotions"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="panel panel-info">
+            <div class="panel-heading">{{charts.journey_select_nlc.title}}</div>
+            <div class="panel-body">
+                <div charter="charts.journey_select_nlc"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-3">
+        <div class="panel panel-info">
+            <div class="panel-heading">{{charts.sentiment.title}}</div>
+            <div class="panel-body">
+                <div charter="charts.sentiment"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div class="panel panel-info">
+            <div class="panel-heading">{{charts.interactions.title}}</div>
+            <div class="panel-body">
+                <div charter="charts.interactions"></div>
+            </div>
+        </div>
+    </div>
+</div>

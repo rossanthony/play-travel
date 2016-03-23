@@ -2,6 +2,7 @@ package forms
 
 import play.api.data.Form
 import play.api.data.Forms._
+import play.api.libs.json.Json
 
 /**
   * The form which handles the submission of the credentials.
@@ -15,9 +16,7 @@ object SignInForm {
     mapping(
       "email" -> email,
       "password" -> nonEmptyText,
-      "rememberMe" -> boolean
-    )(Data.apply)(Data.unapply)
-  )
+      "persist" -> optional(boolean))(Data.apply)(Data.unapply))
 
   /**
     * The form data.
@@ -29,5 +28,17 @@ object SignInForm {
   case class Data(
                    email: String,
                    password: String,
-                   rememberMe: Boolean)
+                   persist: Option[Boolean])
+
+  /**
+    * The companion object.
+    */
+  object Data {
+
+    /**
+      * Converts the [Date] object to Json and vice versa.
+      */
+    implicit val jsonFormat = Json.format[Data]
+  }
+
 }

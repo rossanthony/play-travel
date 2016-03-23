@@ -25,13 +25,14 @@ case class User(
   email: Option[String],
   avatarURL: Option[String]) extends Identity
 
+
 /**
- * The companion object.
- */
+  * The companion object.
+  */
 object User {
 
   /**
-   * Converts the [User] object to Json and vice versa.
-   */
+    * Converts the [User] object to Json and vice versa.
+    */
   implicit val jsonFormat = Json.format[User]
 }

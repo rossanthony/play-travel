@@ -19,18 +19,20 @@ resolvers += Resolver.jcenterRepo
 
 libraryDependencies ++= Seq(
   //jdbc,
-  evolutions,
+  //evolutions,
   filters,
   cache,
-  ws,
+  //ws,
   "com.mohiva" %% "play-silhouette" % "3.0.0",
+  "net.liftweb" % "lift-webkit_2.11" % "3.0-M6", // a light weight framework for web
+  "org.webjars" %% "webjars-play" % "2.4.0",
   "net.codingwell" %% "scala-guice" % "4.0.0",
   "com.adrianhurt" %% "play-bootstrap3" % "0.4.4-P24",
-  "com.iheart" %% "ficus" % "1.1.3",
-  "org.scalatestplus.play" %% "scalatestplus-play" % "1.5.0-RC1" % Test,
-  "com.typesafe.play" %% "play-slick" % "1.1.1",
-  "com.typesafe.play" %% "play-slick-evolutions" % "1.1.1",
-  "mysql" % "mysql-connector-java" % "5.1.36"
+  "com.iheart" %% "ficus" % "1.1.3"
+//  "org.scalatestplus.play" %% "scalatestplus-play" % "1.5.0-RC1" % Test,
+//  "com.typesafe.play" %% "play-slick" % "1.1.1",
+//  "com.typesafe.play" %% "play-slick-evolutions" % "1.1.1",
+//  "mysql" % "mysql-connector-java" % "5.1.36"
 )
 
 

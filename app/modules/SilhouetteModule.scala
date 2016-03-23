@@ -5,7 +5,7 @@ import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.services._
 import com.mohiva.play.silhouette.api.util._
 import com.mohiva.play.silhouette.api.{ Environment, EventBus }
-import com.mohiva.play.silhouette.impl.authenticators._
+import com.mohiva.play.silhouette.impl.authenticators.{ JWTAuthenticator, JWTAuthenticatorService, JWTAuthenticatorSettings }
 import com.mohiva.play.silhouette.impl.daos.{ CacheAuthenticatorDAO, DelegableAuthInfoDAO }
 import com.mohiva.play.silhouette.impl.providers._
 import com.mohiva.play.silhouette.impl.providers.oauth1._
@@ -13,12 +13,19 @@ import com.mohiva.play.silhouette.impl.providers.oauth1.secrets.{ CookieSecretPr
 import com.mohiva.play.silhouette.impl.providers.oauth1.services.PlayOAuth1Service
 import com.mohiva.play.silhouette.impl.providers.oauth2._
 import com.mohiva.play.silhouette.impl.providers.oauth2.state.{ CookieStateProvider, CookieStateSettings, DummyStateProvider }
+import com.mohiva.play.silhouette.impl.providers.openid.YahooProvider
 import com.mohiva.play.silhouette.impl.providers.openid.services.PlayOpenIDService
 import com.mohiva.play.silhouette.impl.repositories.DelegableAuthInfoRepository
 import com.mohiva.play.silhouette.impl.services._
 import com.mohiva.play.silhouette.impl.util._
+import cache.SSDBCacheLayer
 import models.User
-import models.daos._
+import models.daos.OAuth1InfoDAO
+import models.daos.OAuth2InfoDAO
+import models.daos.OpenIDInfoDAO
+import models.daos.PasswordInfoDAO
+import models.daos.UserDAO
+import models.daos.UserDAOImpl
 import models.services.{ UserService, UserServiceImpl }
 import net.ceedubs.ficus.Ficus._
 import net.ceedubs.ficus.readers.ArbitraryTypeReader._
@@ -42,8 +49,8 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
     bind[DelegableAuthInfoDAO[PasswordInfo]].to[PasswordInfoDAO]
     bind[DelegableAuthInfoDAO[OAuth1Info]].to[OAuth1InfoDAO]
     bind[DelegableAuthInfoDAO[OAuth2Info]].to[OAuth2InfoDAO]
-    bind[CacheLayer].to[PlayCacheLayer]
-    bind[OAuth2StateProvider].to[DummyStateProvider]
+    bind[DelegableAuthInfoDAO[OpenIDInfo]].to[OpenIDInfoDAO]
+    bind[CacheLayer].to[SSDBCacheLayer] //bind[CacheLayer].to[PlayCacheLayer]
     bind[IDGenerator].toInstance(new SecureRandomIDGenerator())
     bind[PasswordHasher].toInstance(new BCryptPasswordHasher)
     bind[FingerprintGenerator].toInstance(new DefaultFingerprintGenerator(false))
@@ -78,8 +85,7 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
       userService,
       authenticatorService,
       Seq(),
-      eventBus
-    )
+      eventBus)
   }
 
   /**
@@ -88,31 +94,38 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
     * @param facebookProvider The Facebook provider implementation.
     * @param googleProvider The Google provider implementation.
     * @param vkProvider The VK provider implementation.
+    * @param clefProvider The Clef provider implementation.
     * @param twitterProvider The Twitter provider implementation.
     * @param xingProvider The Xing provider implementation.
+    * @param yahooProvider The Yahoo provider implementation.
     * @return The Silhouette environment.
     */
   @Provides
   def provideSocialProviderRegistry(
-//                                     facebookProvider: FacebookProvider,
+                                     facebookProvider: FacebookProvider,
+                                     twitterProvider: TwitterProvider,
                                      googleProvider: GoogleProvider
 //                                     vkProvider: VKProvider,
-//                                     twitterProvider: TwitterProvider,
-//                                     xingProvider: XingProvider
+//                                     clefProvider: ClefProvider,
+//                                     xingProvider: XingProvider,
+//                                     yahooProvider: YahooProvider
                                    ): SocialProviderRegistry = {
 
     SocialProviderRegistry(Seq(
-      googleProvider
-//      facebookProvider,
-//      twitterProvider,
+      googleProvider,
+      facebookProvider,
+      twitterProvider
 //      vkProvider,
-//      xingProvider
+//      xingProvider,
+//      yahooProvider,
+//      clefProvider
     ))
   }
 
   /**
     * Provides the authenticator service.
     *
+    * @param cacheLayer cachelayer info
     * @param idGenerator The ID generator implementation.
     * @param configuration The Play configuration.
     * @param clock The clock instance.
@@ -135,15 +148,17 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
     * @param passwordInfoDAO The implementation of the delegable password auth info DAO.
     * @param oauth1InfoDAO The implementation of the delegable OAuth1 auth info DAO.
     * @param oauth2InfoDAO The implementation of the delegable OAuth2 auth info DAO.
+    * @param openIDInfoDAO The implementation of the delegable OpenID auth info DAO.
     * @return The auth info repository instance.
     */
   @Provides
   def provideAuthInfoRepository(
                                  passwordInfoDAO: DelegableAuthInfoDAO[PasswordInfo],
                                  oauth1InfoDAO: DelegableAuthInfoDAO[OAuth1Info],
-                                 oauth2InfoDAO: DelegableAuthInfoDAO[OAuth2Info]): AuthInfoRepository = {
+                                 oauth2InfoDAO: DelegableAuthInfoDAO[OAuth2Info],
+                                 openIDInfoDAO: DelegableAuthInfoDAO[OpenIDInfo]): AuthInfoRepository = {
 
-    new DelegableAuthInfoRepository(passwordInfoDAO, oauth1InfoDAO, oauth2InfoDAO)
+    new DelegableAuthInfoRepository(passwordInfoDAO, oauth1InfoDAO, oauth2InfoDAO, openIDInfoDAO)
   }
 
   /**
@@ -166,6 +181,20 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
   def provideOAuth1TokenSecretProvider(configuration: Configuration, clock: Clock): OAuth1TokenSecretProvider = {
     val settings = configuration.underlying.as[CookieSecretSettings]("silhouette.oauth1TokenSecretProvider")
     new CookieSecretProvider(settings, clock)
+  }
+
+  /**
+    * Provides the OAuth2 state provider.
+    *
+    * @param idGenerator The ID generator implementation.
+    * @param configuration The Play configuration.
+    * @param clock The clock instance.
+    * @return The OAuth2 state provider implementation.
+    */
+  @Provides
+  def provideOAuth2StateProvider(idGenerator: IDGenerator, configuration: Configuration, clock: Clock): OAuth2StateProvider = {
+    val settings = configuration.underlying.as[CookieStateSettings]("silhouette.oauth2StateProvider")
+    new CookieStateProvider(settings, idGenerator, clock)
   }
 
   /**
@@ -235,6 +264,19 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
   }
 
   /**
+    * Provides the Clef provider.
+    *
+    * @param httpLayer The HTTP layer implementation.
+    * @param configuration The Play configuration.
+    * @return The Clef provider.
+    */
+  @Provides
+  def provideClefProvider(httpLayer: HTTPLayer, configuration: Configuration): ClefProvider = {
+
+    new ClefProvider(httpLayer, new DummyStateProvider, configuration.underlying.as[OAuth2Settings]("silhouette.clef"))
+  }
+
+  /**
     * Provides the Twitter provider.
     *
     * @param httpLayer The HTTP layer implementation.
@@ -268,5 +310,25 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
 
     val settings = configuration.underlying.as[OAuth1Settings]("silhouette.xing")
     new XingProvider(httpLayer, new PlayOAuth1Service(settings), tokenSecretProvider, settings)
+  }
+
+  /**
+    * Provides the Yahoo provider.
+    *
+    * @param cacheLayer The cache layer implementation.
+    * @param httpLayer The HTTP layer implementation.
+    * @param client The OpenID client implementation.
+    * @param configuration The Play configuration.
+    * @return The Yahoo provider.
+    */
+  @Provides
+  def provideYahooProvider(
+                            cacheLayer: CacheLayer,
+                            httpLayer: HTTPLayer,
+                            client: OpenIdClient,
+                            configuration: Configuration): YahooProvider = {
+
+    val settings = configuration.underlying.as[OpenIDSettings]("silhouette.yahoo")
+    new YahooProvider(httpLayer, new PlayOpenIDService(client, settings), settings)
   }
 }

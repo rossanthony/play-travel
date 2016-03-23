@@ -1,26 +1,15 @@
 // Comment to get more information during initialization
-logLevel := Level.Warn
+logLevel := Level.Info
 
+// The Typesafe repository
 resolvers += "Typesafe repository" at "http://repo.typesafe.com/typesafe/releases/"
 
+// The Sonatype snapshots repository
 resolvers += "Sonatype snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/"
 
-resolvers += "Scalaz Bintray" at "https://dl.bintray.com/scalaz/releases"
+// Use the Play sbt plugin for Play projects
+addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.4.2")
 
-// The Play plugin
-addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.5.0")
+// Use the Scalariform plugin to reformat the code
+addSbtPlugin("com.typesafe.sbt" % "sbt-scalariform" % "1.3.0")
 
-// web plugins
-addSbtPlugin("com.typesafe.sbt" % "sbt-coffeescript" % "1.0.0")
-
-addSbtPlugin("com.typesafe.sbt" % "sbt-less" % "1.1.0")
-
-addSbtPlugin("com.typesafe.sbt" % "sbt-jshint" % "1.0.3")
-
-addSbtPlugin("com.typesafe.sbt" % "sbt-rjs" % "1.0.7")
-
-addSbtPlugin("com.typesafe.sbt" % "sbt-digest" % "1.1.0")
-
-addSbtPlugin("com.typesafe.sbt" % "sbt-mocha" % "1.1.0")
-
-addSbtPlugin("org.irundaia.sbt" % "sbt-sassify" % "1.4.2")

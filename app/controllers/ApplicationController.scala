@@ -8,6 +8,8 @@ import com.mohiva.play.silhouette.impl.providers.SocialProviderRegistry
 import models.User
 import play.api.i18n.MessagesApi
 import play.api.libs.json.Json
+import utils.StringHelper.ToJson
+import play.api.mvc._
 
 import scala.concurrent.Future
 
@@ -26,13 +28,45 @@ class ApplicationController @Inject() (
   extends Silhouette[User, JWTAuthenticator] {
 //  extends Silhouette[User, CookieAuthenticator] {
 
+
+  /**
+    * Create an Action to render an HTML page with a welcome message.
+    * The configuration in the `routes` file means that this method
+    * will be called when the application receives a `GET` request with
+    * a path of `/`.
+    */
+  def index = Action {
+    Ok(views.html.index())
+  }
+
+  def anyPath(path: String) = Action {
+    Ok(views.html.index())
+  }
+
   /**
     * Returns the user.
     *
     * @return The result to display.
     */
-  def user = SecuredAction.async { implicit request =>
-    Future.successful(Ok(Json.toJson(request.identity)))
+//  def user = SecuredAction.async { implicit request =>
+//    Future.successful(Ok(Json.toJson(request.identity)))
+//  }
+  def getMe = UserAwareAction.async { implicit request =>
+    Future.successful({
+      request.identity match {
+        case Some(user) =>
+          Ok(Map[String, Any](
+            "status" -> true,
+            "message" -> s"Hello, ${user.fullName} <${user.email}>"
+          ).toJson)
+        case None =>
+          Unauthorized(
+            Map[String, Any](
+              "status" -> false,
+              "message" -> "user.not_authorizaed"
+            ).toJson)
+      }
+    }.as("application/json"))
   }
 
   /**

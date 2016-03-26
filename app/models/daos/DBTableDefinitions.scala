@@ -1,5 +1,6 @@
 package models.daos
 
+import models.Flight
 import com.mohiva.play.silhouette.api.LoginInfo
 import slick.driver.JdbcProfile
 import slick.lifted.ProvenShape.proveShapeOf
@@ -125,6 +126,28 @@ trait DBTableDefinitions {
     def * = (id, key, value) <> (DBOpenIDAttribute.tupled, DBOpenIDAttribute.unapply)
   }
 
+
+
+
+  class Flights(tag: Tag) extends Table[Flight](tag, "flight") {
+    def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
+    def flightNumber = column[Int]("flightNumber")
+    def airlineCode = column[String]("airlineCode")
+    def airlineName = column[String]("airlineName")
+    def departureLocation = column[String]("departureLocation")
+    def departureDay = column[Int]("departureDay")
+    def departureTime = column[Int]("departureTime")
+    def arrivalLocation = column[String]("arrivalLocation")
+    def arrivalDay = column[Int]("arrivalDay")
+    def arrivalTime = column[Int]("arrivalTime")
+    def economyCost = column[Int]("economyCost")
+    def businessCost = column[Int]("businessCost")
+    def * = (id.?, flightNumber, airlineCode, airlineName, departureLocation, departureDay, departureTime, arrivalLocation, arrivalDay, arrivalTime, economyCost, businessCost) <> ((Flight.apply _).tupled, Flight.unapply _)
+  }
+
+
+
+
   // table query definitions
   val slickUsers = TableQuery[Users]
   val slickLoginInfos = TableQuery[LoginInfos]
@@ -134,7 +157,8 @@ trait DBTableDefinitions {
   val slickOAuth2Infos = TableQuery[OAuth2Infos]
   val slickOpenIDInfos = TableQuery[OpenIDInfos]
   val slickOpenIDAttributes = TableQuery[OpenIDAttributes]
-  
+  val slickFlights = TableQuery[Flights]
+
   // queries used in multiple places
   def loginInfoQuery(loginInfo: LoginInfo) = 
     slickLoginInfos.filter(dbLoginInfo => dbLoginInfo.providerID === loginInfo.providerID && dbLoginInfo.providerKey === loginInfo.providerKey)

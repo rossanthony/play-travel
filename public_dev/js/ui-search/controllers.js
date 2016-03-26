@@ -2,10 +2,23 @@
 
 /* Controllers */
 
-angular.module('PlayTravelApp.page-conversations.controllers', [])
-    .controller('ConversationsPageCtrl',['$scope', '$state','ConversationsData', function ($scope, $state, ConversationsData) {
-        $scope.conversations = ConversationsData.conversations;
-        $scope.pagination    = ConversationsData.pagination;
+angular.module('PlayTravelApp.ui-search.controllers', [])
+    .controller('SearchPageCtrl',['$scope', '$state','Search', function ($scope, $state, Search) {
+        //$scope.Results = SearchData.Flights;
+        //$scope.pagination    = SearchData.pagination;
+
+        $scope.submit = function() {
+            console.log("form submitted!");
+
+            Search.get({
+                date_from : 123,
+                date_to : 321
+            },function (data) {
+                console.log(data);
+            }, function (err) {
+                console.log("Unable to perform search", err)
+            });
+        };
 
         $scope.$watch('pagination.page', function(newValue, oldValue) {
             if (typeof newValue != 'undefined' && newValue != oldValue) {
@@ -33,16 +46,6 @@ angular.module('PlayTravelApp.page-conversations.controllers', [])
             $state.transitionTo($state.current.name, params, {reload : $state.$current});
         };
 
-        console.log('conversations controller 1');
-        console.log(ConversationsData);
-    }])
-    .controller('ConversationPageCtrl',['$scope', '$state', 'ConversationData', 'ReclassifyMessage', function ($scope, $state, ConversationData, ReclassifyMessage) {
-        $scope.conversation = ConversationData;
-        console.log('conversation controller 2');
-        console.log(ConversationData);
-
-        $scope.addToClassifier = function(message) {
-            ReclassifyMessage(message);
-        };
+        console.log('Search controller 1');
     }])
 ;

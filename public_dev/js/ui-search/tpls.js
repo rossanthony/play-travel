@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module(
-    "PlayTravelApp.page-conversations.tpls",
+    "PlayTravelApp.ui-search.tpls",
     [
         "template/reclassify-message-overlay.html"
     ]

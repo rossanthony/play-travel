@@ -42,8 +42,12 @@ angular.module('PlayTravelApp.controllers', [])
                 };
 
                 $http(request).success(function(data) {
+
+                    console.log('login form:', data);
+
                     $scope.formErrors = data.errors;
                     if (data.errors.length == 0) {
+                        console.log('go to dashboard!');
                         $state.go('admin.dashboard');
                     }
                 })
@@ -82,7 +86,7 @@ angular.module('PlayTravelApp.controllers', [])
             });
         };
     }])
-    .controller('SignInCtrl', ['$scope', '$alert', '$auth', function($scope, $alert, $auth) {
+    .controller('SignInCtrl', ['$scope', '$alert', '$auth', '$state', function($scope, $alert, $auth, $state) {
         /**
          * Submits the login form.
          */
@@ -90,6 +94,8 @@ angular.module('PlayTravelApp.controllers', [])
             $auth.setStorageType($scope.rememberMe ? 'localStorage' : 'sessionStorage');
             $auth.login({ email: $scope.email, password: $scope.password, rememberMe: $scope.rememberMe })
                 .then(function() {
+                    console.log("logged in!!");
+                    //$state.go('admin.flights');
                     $alert({
                         content: 'You have successfully signed in',
                         animation: 'fadeZoomFadeDown',

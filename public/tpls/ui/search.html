@@ -1,0 +1,28 @@
+<div class="panel panel-default">
+    <div class="panel-body form-inline">
+        Search for flights
+
+        <form name="searchForm" ng-model="searchForm" ng-submit="submit()">
+            <span class="input-group">
+                <input type="text" class="form-control" uib-datepicker-popup="dd-MM-yyyy" ng-click="datepicker1 = !datepicker1" ng-model="dateFrom" show-weeks="false" is-open="datepicker1" datepicker-options="dateOptions" close-text="Close" />
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-link" ng-click="datepicker1 = !datepicker1" ><i class="fa fa-calendar"></i></button>
+                </span>
+            </span>
+
+            to &nbsp;&nbsp;&nbsp;&nbsp;
+
+            <span class="input-group">
+                <input type="text" class="form-control" uib-datepicker-popup="dd-MM-yyyy" ng-click="datepicker2 = !datepicker2" ng-model="dateTo" show-weeks="false" is-open="datepicker2" datepicker-options="dateOptions" close-text="Close" />
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-link" ng-click="datepicker2 = !datepicker2"><i class="fa fa-calendar"></i></button>
+                </span>
+            </span>
+
+            <button class="btn btn-default btn-sm" ng-disabled="dataLoading" ng-click="(!dataLoading) ? reloadData() : null">
+                <i class="fa fa-refresh" ng-class="{'fa-spin': dataLoading}"></i>
+            </button>
+
+        </form>
+    </div>
+</div>

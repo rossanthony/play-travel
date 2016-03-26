@@ -23,11 +23,8 @@ import scala.concurrent.Future
 class ApplicationController @Inject() (
                                         val messagesApi: MessagesApi,
                                         val env: Environment[User, JWTAuthenticator],
-//                                        val env: Environment[User, CookieAuthenticator],
                                         socialProviderRegistry: SocialProviderRegistry)
   extends Silhouette[User, JWTAuthenticator] {
-//  extends Silhouette[User, CookieAuthenticator] {
-
 
   /**
     * Create an Action to render an HTML page with a welcome message.

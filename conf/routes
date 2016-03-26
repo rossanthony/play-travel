@@ -6,6 +6,13 @@
 POST    /signUp             controllers.auth.AuthorizationController.signUp
 POST    /signIn             controllers.auth.CredentialsAuthController.authenticate
 
+GET     /user               controllers.ApplicationController.getMe
+GET     /logout             controllers.ApplicationController.signOut
+
+GET     /flight/search      controllers.FlightController.search
+GET     /flight/:id         controllers.FlightController.getFlight(id:Int)
+
+
 GET     /assets/*file       controllers.Assets.at(path="/public", file)
 
 

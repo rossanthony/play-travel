@@ -30,8 +30,8 @@ angular.module('PlayTravelApp', [
 
     //App Pages
     'PlayTravelApp.page-dashboard',
-    'PlayTravelApp.page-conversations',
-    'PlayTravelApp.page-current-classifier'
+    'PlayTravelApp.page-flights',
+    'PlayTravelApp.ui-search'
 ])
     .config(['$stateProvider','$urlRouterProvider', '$httpProvider', '$authProvider', '$alertProvider', function ($stateProvider, $urlRouterProvider, $httpProvider, $authProvider, $alertProvider) {
 
@@ -51,7 +51,7 @@ angular.module('PlayTravelApp', [
         //    .state('404', { url: '/404', templateUrl: '/assets/tpls/404.html', controller: 'NotFoundCtrl'})
         //;
 
-        //$urlRouterProvider.otherwise('/admin');
+        $urlRouterProvider.otherwise('/404');
 
         $stateProvider
             .state('admin', { url: '/admin', abstract: true, templateUrl: '/assets/tpls/admin-layout.html', controller: 'AdminCtrl', resolve: {
@@ -149,9 +149,9 @@ angular.module('PlayTravelApp', [
         // Auth config
         $authProvider.httpInterceptor = true; // Add Authorization header to HTTP request
         $authProvider.loginOnSignup = true;
-        $authProvider.loginRedirect = '/home';
-        $authProvider.logoutRedirect = '/';
-        $authProvider.signupRedirect = '/home';
+        $authProvider.loginRedirect = '/admin/flights';
+        $authProvider.logoutRedirect = '/signIn';
+        $authProvider.signupRedirect = '/admin';
         $authProvider.loginUrl = '/signIn';
         $authProvider.signupUrl = '/signUp';
         $authProvider.loginRoute = '/signIn';

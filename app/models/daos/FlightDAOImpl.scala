@@ -7,6 +7,7 @@ import javax.inject.Inject
 import play.api.db.slick.DatabaseConfigProvider
 import scala.concurrent.Future
 
+
 /**
   * Give access to the flight object using Slick
   */
@@ -42,6 +43,23 @@ class FlightDAOImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProv
         )
       }
     }
+  }
+
+  /**
+    * Search for flights.
+    *
+    * @param
+    * @return The found flights or None if no flight(s) were found matching search criteria.
+    */
+  def search(params: Map[String,Seq[String]]) = {
+
+    val paramsFlat = params.map { case (k,v) => k -> v.mkString }
+
+    val departureLocation = paramsFlat("departureLocation").toString
+    println(s"---$departureLocation---")
+
+    val query = slickFlights.filter(_.departureLocation === departureLocation)
+    db.run(query.result)
   }
 
   /**

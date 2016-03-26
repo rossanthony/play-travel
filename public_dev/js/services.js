@@ -4,12 +4,11 @@
 
 angular.module('PlayTravelApp.services', [])
     .factory('Ui', ['$resource', function ($resource) {
-        return $resource('/WHATEVER/ui-data',{}, { 'get': {method: 'GET'}});
+        return $resource('/ui-data',{}, { 'get': {method: 'GET'}});
     }])
     .factory('UiData', ['$q','Ui', function ($q,Ui) {
         return function () {
             return {data:[1,2,3]};
-
 
             //var delay = $q.defer();
             //Ui.get(function (data) {
@@ -20,48 +19,6 @@ angular.module('PlayTravelApp.services', [])
             //return delay.promise;
         };
     }])
-    .factory('LogoutResource', ['$resource', function ($resource) {
-        return $resource('/WHATEVER/logout',{}, {'get': {method: 'GET'}});
-    }])
-    .factory('Logout', ['LogoutResource','$state', function (LogoutResource, $state) {
-        return function () {
-            LogoutResource.get({},function (data) {
-                if (typeof data.errors !=  'undefined' && data.errors.length > 0) {
-                    angular.forEach(data.errors, function(error) {
-                        //@todo handle the error (error.message)
-                    });
-                } else {
-                    $state.go('login');
-                }
-            }, function () {
-                //@todo handle the error
-            });
-        };
-    }])
-    .factory('BatchResource', ['$resource', function ($resource) {
-        return $resource(
-            'http://127.0.0.1:3001/:instance/batch_data/:item',
-            {
-                instance     : '@instance',
-                item         : '@item'
-            },
-            {
-                'put'    :{method: 'PUT'},
-                'get'    :{method: 'GET'},
-                'post'   :{method: 'POST'},
-                'delete' :{method: 'DELETE'}
-            });
-    }])
-    //.factory('StatusResource', ['$resource', function ($resource) {
-    //    return $resource(
-    //        'http://127.0.0.1:3001/:instance/status',
-    //        {
-    //            instance : '@instance'
-    //        },
-    //        {
-    //            'get' :{method: 'GET'}
-    //        });
-    //}])
     .factory('ReloadState', ['$state', function ($state) {
         return function () {
             $state.transitionTo($state.current.name, $state.params, {reload : $state.$current});
@@ -98,27 +55,4 @@ angular.module('PlayTravelApp.services', [])
             });
         };
     }])
-    .factory('socket', function ($rootScope) {
-        var socket = io.connect();
-        return {
-            on: function (eventName, callback) {
-                socket.on(eventName, function () {
-                    var args = arguments;
-                    $rootScope.$apply(function () {
-                        callback.apply(socket, args);
-                    });
-                });
-            },
-            emit: function (eventName, data, callback) {
-                socket.emit(eventName, data, function () {
-                    var args = arguments;
-                    $rootScope.$apply(function () {
-                        if (callback) {
-                            callback.apply(socket, args);
-                        }
-                    });
-                })
-            }
-        };
-    })
 ;

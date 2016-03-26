@@ -1,24 +1,24 @@
 'use strict';
 
 angular.module(
-    "PlayTravelApp.page-conversations",
+    "PlayTravelApp.page-flights",
     [
-        "PlayTravelApp.page-conversations.controllers",
-        "PlayTravelApp.page-conversations.services",
-        "PlayTravelApp.page-conversations.tpls"
+        "PlayTravelApp.page-flights.controllers",
+        "PlayTravelApp.page-flights.services",
+        "PlayTravelApp.page-flights.tpls"
     ]
 )
     .config(['$stateProvider', function ($stateProvider) {
 
         $stateProvider
-            .state('admin.conversations', { url: '/conversations?{items_per_page}&{page}', templateUrl: '/assets/tpls/conversations.html', controller: 'ConversationsPageCtrl',
+            .state('admin.flights', { url: '/flights?{items_per_page}&{page}', templateUrl: '/assets/tpls/flights.html', controller: 'FlightsPageCtrl',
                 resolve: {
                     ConversationsData: function (ConversationsData, $stateParams) {
                         return ConversationsData($stateParams);
                     }
                 }
             })
-            .state('admin.conversations.item', { url: '/:conversation', templateUrl: '/assets/tpls/conversation.html', controller: 'ConversationPageCtrl',
+            .state('admin.flights.item', { url: '/:flight', templateUrl: '/assets/tpls/flight.html', controller: 'FlightPageCtrl',
                 resolve: {
                     ConversationData: function (ConversationData, $stateParams) {
                         return ConversationData($stateParams);

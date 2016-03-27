@@ -4,19 +4,18 @@
 
 angular.module('PlayTravelApp.services', [])
     .factory('Ui', ['$resource', function ($resource) {
-        return $resource('/ui-data',{}, { 'get': {method: 'GET'}});
+        return $resource('http://127.0.0.1:9000/user');
     }])
-    .factory('UiData', ['$q','Ui', function ($q,Ui) {
+    .factory('UiData', ['$q','Ui', function ($q, Ui) {
         return function () {
-            return {data:[1,2,3]};
-
-            //var delay = $q.defer();
-            //Ui.get(function (data) {
-            //    delay.resolve(data);
-            //}, function () {
-            //    delay.reject('Unable to fetch data');
-            //});
-            //return delay.promise;
+            //return {data:[1,2,3]};
+            var delay = $q.defer();
+            Ui.get(function (data) {
+                delay.resolve(data);
+            }, function () {
+                delay.reject('Unable to fetch data');
+            });
+            return delay.promise;
         };
     }])
     .factory('ReloadState', ['$state', function ($state) {

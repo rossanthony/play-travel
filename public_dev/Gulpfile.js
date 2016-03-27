@@ -59,7 +59,9 @@ gulp.task('vendor-js', function () {
             'bower_components/angular-sanitize/angular-sanitize.min.js',
             'bower_components/angular-touch/angular-touch.min.js',
             'bower_components/satellizer/satellizer.min.js',
+            'bower_components/angular-material/angular-material.min.js',
 
+            'bower_components/angular-material-data-table/dist/md-data-table.min.js',
             'bower_components/angular-ui-router/release/angular-ui-router.min.js',
 
             //'node_modules/socket.io-client/socket.io.js',
@@ -138,16 +140,16 @@ gulp.task('vendor-css', function() {
 
     gulp.src(
         [
-            //'bower_components/angular-material/angular-material.min.css',
-            'bower_components/angular-material/modules/js/core/core.min.css',
-            'bower_components/angular-material/modules/js/input/input.min.css',
-            'bower_components/angular-material/modules/js/checkbox/checkbox.min.css',
-            'bower_components/angular-material/modules/js/switch/switch.min.css',
+            'bower_components/angular-material/angular-material.min.css',
+            //'bower_components/angular-material/modules/js/core/core.min.css',
+            //'bower_components/angular-material/modules/js/input/input.min.css',
+            //'bower_components/angular-material/modules/js/checkbox/checkbox.min.css',
+            //'bower_components/angular-material/modules/js/switch/switch.min.css',
             //'bower_components/angular-material/modules/js/sidenav/sidenav.min.css',
-            'bower_components/angular-chart.js/dist/angular-chart.css',
             'bower_components/ui-select/dist/select.min.css',
             'bower_components/angular-toastr/dist/angular-toastr.min.css',
             'bower_components/angular-loading-bar/build/loading-bar.min.css',
+            'bower_components/angular-material-data-table/dist/md-data-table.min.css',
             'css/vendor/*.css'
         ]
         )

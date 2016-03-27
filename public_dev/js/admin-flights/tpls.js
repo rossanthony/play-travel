@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module(
-    "PlayTravelApp.page-flights.tpls",
+    "PlayTravelApp.admin-flights.tpls",
     [
         "template/reclassify-message-overlay.html"
     ]

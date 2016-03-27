@@ -5,58 +5,43 @@
 angular.module('PlayTravelApp.controllers', [])
     //Page specific Controllers
     .controller('AdminCtrl',['$rootScope', '$scope', '$state', '$stateParams', '$location', 'UiData', '$interval', function ($rootScope, $scope, $state, $stateParams, $location, UiData, $interval) {
-        $scope.uiData             = UiData;
-        $rootScope.batchAvailable     = false;
-        $rootScope.trainingInProgress = false;
-
-        console.log(UiData);
-
-        //$interval(function() {
-        //    StatusResource.get(
-        //        {instance: '1'},
-        //        function(data){
-        //            $rootScope.batchAvailable     = data.batch_edited;
-        //            $rootScope.trainingInProgress = data.training_in_progress;
-        //        },function(){
-        //            $rootScope.batchAvailable     = false;
-        //            $rootScope.trainingInProgress = false;
-        //        });
-        //}, 3000);
+        $scope.uiData = UiData;
+        console.log('UiData', UiData);
     }])
     .controller('NotFoundController',['$scope', '$state', function ($scope, $state) {
         console.log('NotFound');
     }])
-    .controller('LoginCtrl',['$scope', '$state', '$http', function ($scope, $state, $http) {
-
-        $scope.submit = function (isValid) {
-            if (isValid) {
-                $scope.formErrors = [];
-
-                var request = {
-                    method: 'POST',
-                    url: '/api/auth',
-                    data: {
-                        username   : $scope.user.username,
-                        password   : $scope.user.password
-                    }
-                };
-
-                $http(request).success(function(data) {
-
-                    console.log('login form:', data);
-
-                    $scope.formErrors = data.errors;
-                    if (data.errors.length == 0) {
-                        console.log('go to dashboard!');
-                        $state.go('admin.dashboard');
-                    }
-                })
-                .error(function(data) {
-                    $scope.formErrors = data.errors;
-                });
-            }
-        };
-    }])
+    //.controller('LoginCtrl',['$scope', '$state', '$http', function ($scope, $state, $http) {
+    //
+    //    $scope.submit = function (isValid) {
+    //        if (isValid) {
+    //            $scope.formErrors = [];
+    //
+    //            var request = {
+    //                method: 'POST',
+    //                url: '/api/auth',
+    //                data: {
+    //                    username   : $scope.user.username,
+    //                    password   : $scope.user.password
+    //                }
+    //            };
+    //
+    //            $http(request).success(function(data) {
+    //
+    //                console.log('login form:', data);
+    //
+    //                $scope.formErrors = data.errors;
+    //                if (data.errors.length == 0) {
+    //                    console.log('go to dashboard!');
+    //                    $state.go('admin.dashboard');
+    //                }
+    //            })
+    //            .error(function(data) {
+    //                $scope.formErrors = data.errors;
+    //            });
+    //        }
+    //    };
+    //}])
     .controller('SignUpCtrl', ['$scope', '$alert', '$auth', function($scope, $alert, $auth) {
         /**
          * The submit method.
@@ -95,7 +80,7 @@ angular.module('PlayTravelApp.controllers', [])
             $auth.login({ email: $scope.email, password: $scope.password, rememberMe: $scope.rememberMe })
                 .then(function() {
                     console.log("logged in!!");
-                    //$state.go('admin.flights');
+                    $state.go('admin.flights');
                     $alert({
                         content: 'You have successfully signed in',
                         animation: 'fadeZoomFadeDown',

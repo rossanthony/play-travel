@@ -20,8 +20,11 @@ class FlightServiceImpl @Inject() (flightDAO: FlightDAO) extends FlightService {
     */
   def retrieve(id: Int): Future[Option[Flight]] = flightDAO.find(id)
 
+  def delete(id: Int): Future[Unit] = flightDAO.remove(id)
 
-  def search(params: Map[String,Seq[String]]): Future[Seq[Flight]] = flightDAO.search(params)
+  def getAllFlights: Future[Seq[Flight]] = flightDAO.getAllFlights
+
+  def search(departureLocation: Option[String], arrivalLocation: Option[String]): Future[Seq[Flight]] = flightDAO.search(departureLocation: Option[String], arrivalLocation: Option[String])
 
   /**
     * Saves a flight.

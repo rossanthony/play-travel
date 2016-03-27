@@ -10,7 +10,10 @@ GET     /user               controllers.ApplicationController.getMe
 GET     /logout             controllers.ApplicationController.signOut
 
 GET     /flight/search      controllers.FlightController.search
+GET     /flight             controllers.FlightController.getAllFlights
 GET     /flight/:id         controllers.FlightController.getFlight(id:Int)
+DELETE  /flight/:id         controllers.FlightController.deleteFlight(id:Int)
+
 
 
 GET     /assets/*file       controllers.Assets.at(path="/public", file)

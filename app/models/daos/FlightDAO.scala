@@ -17,7 +17,10 @@ trait FlightDAO {
   def find(id: Int): Future[Option[Flight]]
 
 
-  def search(params: Map[String,Seq[String]]): Future[Seq[Flight]]
+  def getAllFlights: Future[Seq[Flight]]
+
+
+  def search(departureLocation: Option[String], arrivalLocation: Option[String]): Future[Seq[Flight]]
 
   /**
     * Saves a flight.
@@ -26,4 +29,12 @@ trait FlightDAO {
     * @return The saved flight.
     */
   def save(flight: Flight): Future[Flight]
+
+  /**
+    * Remove a flight.
+    *
+    * @param id of the flight
+    * @return A future to wait for the process to be completed.
+    */
+  def remove(id: Int): Future[Unit]
 }

@@ -14,14 +14,10 @@ angular.module('PlayTravelApp', [
     'ui.select',
     'angular-loading-bar',
     'toastr',
-    'chart.js',
     'satellizer',
     'mgcrea.ngStrap',
-
-    //'btford.socket-io',
-    'material.components.input',
-    'material.components.switch',
-    'material.components.checkbox',
+    'ngMaterial',
+    'md.data.table',
 
     //App
     'PlayTravelApp.controllers',
@@ -29,8 +25,7 @@ angular.module('PlayTravelApp', [
     'PlayTravelApp.tpls',
 
     //App Pages
-    'PlayTravelApp.page-dashboard',
-    'PlayTravelApp.page-flights',
+    'PlayTravelApp.admin-flights',
     'PlayTravelApp.ui-search'
 ])
     .config(['$stateProvider','$urlRouterProvider', '$httpProvider', '$authProvider', '$alertProvider', function ($stateProvider, $urlRouterProvider, $httpProvider, $authProvider, $alertProvider) {
@@ -65,6 +60,9 @@ angular.module('PlayTravelApp', [
                     }
 
                     return deferred.promise;
+                },
+                UiData: function (UiData) {
+                    return UiData();
                 }
             }})
             .state('signUp', {

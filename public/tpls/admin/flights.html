@@ -1,0 +1,88 @@
+<!--
+<div class="panel panel-default">
+    <div class="panel-body form-inline">
+        Displaying Flights from &nbsp;&nbsp;&nbsp;&nbsp;
+        <span class="input-group">
+            <input type="text" class="form-control" uib-datepicker-popup ng-click="datepicker1 = !datepicker1" ng-model="dateFrom" show-weeks="false" is-open="datepicker1" datepicker-options="dateOptions" close-text="Close" />
+            <span class="input-group-btn">
+                <button type="button" class="btn btn-link" ng-click="datepicker1 = !datepicker1" ><i class="fa fa-calendar"></i></button>
+            </span>
+        </span>
+
+        to &nbsp;&nbsp;&nbsp;&nbsp;
+
+        <span class="input-group">
+            <input type="text" class="form-control" uib-datepicker-popup ng-click="datepicker2 = !datepicker2" ng-model="dateTo" show-weeks="false" is-open="datepicker2" datepicker-options="dateOptions" close-text="Close" />
+            <span class="input-group-btn">
+                <button type="button" class="btn btn-link" ng-click="datepicker2 = !datepicker2" ><i class="fa fa-calendar"></i></button>
+            </span>
+        </span>
+
+        <button class="btn btn-default btn-sm">
+            <i class="fa fa-refresh"></i>
+        </button>
+    </div>
+</div>
+-->
+
+
+<md-toolbar class="md-table-toolbar md-default" ng-hide="selected.length || filter.show">
+    <div class="md-toolbar-tools">
+        <h2 class="md-title">Flights</h2>
+        <div flex></div>
+        <md-button class="md-icon-button" ng-click="filter.show = true">
+            <md-icon>filter_list</md-icon>
+        </md-button>
+        <md-button class="md-icon-button" ng-click="addItem($event)">
+            <md-icon>local_dining</md-icon>
+        </md-button>
+    </div>
+</md-toolbar>
+<!--
+<md-toolbar class="md-table-toolbar md-default" ng-show="filter.show && !selected.length">
+    <div class="md-toolbar-tools">
+        <md-icon>search</md-icon>
+        <form flex name="filter.form">
+            <input type="text" ng-model="query.filter" ng-model-options="filter.options" placeholder="search">
+        </form>
+        <md-button class="md-icon-button" ng-click="removeFilter()">
+            <md-icon>close</md-icon>
+        </md-button>
+    </div>
+</md-toolbar>
+-->
+<md-toolbar class="md-table-toolbar alternate" ng-show="selected.length">
+    <div class="md-toolbar-tools" layout-align="space-between">
+        <div>{{selected.length}} {{selected.length > 1 ? 'items' : 'item'}} selected</div>
+        <md-button class="md-icon-button" ng-click="delete($event)">
+            <md-icon>delete</md-icon>
+        </md-button>
+    </div>
+</md-toolbar>
+
+
+<!-- exact table from live demo -->
+<md-table-container>
+            <table md-table md-row-select="options.rowSelection" ng-model="selected" md-progress="promise">
+                <thead md-head md-order="query.order" md-on-reorder="onReorder">
+                <tr md-row>
+                    <th md-column md-numeric><span>Flight no.</span></th>
+                    <th md-column><span>Airline code</span></th>
+                    <th md-column><span>Airline</span></th>
+                    <th md-column md-order-by="departureLocation"><span>Departure location</span></th>
+                    <th md-column md-order-by="arrivalLocation"><span>Arrival location</span></th>
+                </tr>
+                </thead>
+                <tbody md-body>
+                    <tr md-row md-select="flight" md-select-id="{{flight.id}}" md-auto-select ng-repeat="flight in flights">
+                        <td md-cell>{{flight.flightNumber}}</td>
+                        <td md-cell>{{flight.airlineCode}}</td>
+                        <td md-cell>{{flight.airlineName}}</td>
+                        <td md-cell>{{flight.departureLocation}}</td>
+                        <td md-cell>{{flight.arrivalLocation}}</td>
+                    </tr>
+                </tbody>
+            </table>
+</md-table-container>
+
+<md-table-pagination md-limit="query.limit" md-page="query.page" md-total="{{flights.count}}" md-on-paginate="onPaginate" md-page-select></md-table-pagination>

@@ -1,0 +1,15 @@
+
+<md-dialog delete-dialog>
+    <md-dialog-content class="md-dialog-content">
+        <h2 class="md-title">Delete Items</h2>
+        <p>Are you sure you want to delete this flight?</p>
+        <p class="md-warn" ng-if="error" layout="row" layout-align="start center">
+            <md-icon>error_outline</md-icon>
+            <span>&nbsp; {{error}}</span>
+        </p>
+    </md-dialog-content>
+    <div class="md-dialog-actions">
+        <md-button class="md-primary" ng-click="ctrl.confirm()">Delete</md-button>
+        <md-button class="md-primary" ng-click="ctrl.cancel()">Close</md-button>
+    </div>
+</md-dialog>

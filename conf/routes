@@ -3,18 +3,19 @@
 # ~~~~
 
 
-POST    /signUp             controllers.auth.AuthorizationController.signUp
-POST    /signIn             controllers.auth.CredentialsAuthController.authenticate
-
-GET     /user               controllers.ApplicationController.getMe
-GET     /logout             controllers.ApplicationController.signOut
+POST    /api/auth/sign-up   controllers.auth.AuthorizationController.signUp
+POST    /api/auth/sign-in   controllers.auth.CredentialsAuthController.authenticate
+GET     /api/auth/sign-out  controllers.auth.AuthorizationController.signOut
+GET     /api/auth/user      controllers.auth.AuthorizationController.getMe
 
 GET     /flight/search      controllers.FlightController.search
 GET     /flight             controllers.FlightController.getAllFlights
 GET     /flight/:id         controllers.FlightController.getFlight(id:Int)
+
+# Authorised Admin only routes
 DELETE  /flight/:id         controllers.FlightController.deleteFlight(id:Int)
-
-
+#POST    /flight             controllers.FlightController.createFlight
+#PUT     /flight/:id             controllers.FlightController.updateFlight(id:Int)
 
 GET     /assets/*file       controllers.Assets.at(path="/public", file)
 

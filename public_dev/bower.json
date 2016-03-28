@@ -18,9 +18,7 @@
     "test",
     "tests"
   ],
-  "dependencies": {
-
-  },
+  "dependencies": {},
   "devDependencies": {
     "angular": "~1.4.8",
     "angular-animate": "~1.4.8",
@@ -45,6 +43,7 @@
     "angular-socket-io": "~0.7.0",
     "angular-chart.js": "~0.8.8",
     "satellizer": "^0.14.0",
-    "angular-strap": "^2.3.7"
+    "angular-strap": "^2.3.7",
+    "material-design-icons": "^2.2.3"
   }
 }

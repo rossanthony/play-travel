@@ -16,7 +16,7 @@ trait FlightService {
     */
   def save(flight: Flight): Future[Flight]
 
-  def search(departureLocation: Option[String], arrivalLocation: Option[String]): Future[Seq[Flight]]
+  def search(departureLocation: Option[Int], arrivalLocation: Option[Int]): Future[Seq[Flight]]
 
   def delete(id: Int): Future[Unit]
 }

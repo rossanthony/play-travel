@@ -1,40 +1,10 @@
 package models.daos
 
 import models.Flight
-import net.liftweb.util.True
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
-import slick.dbio.DBIOAction
-import slick.lifted.Query
 import javax.inject.Inject
 import play.api.db.slick.DatabaseConfigProvider
-
-import scala.reflect.internal.util.TableDef.Column
-
-//import slick.model.Column
 import scala.concurrent.Future
-
-
-
-
-
-//import slick.lifted.CanBeQueryCondition
-//// optionally filter on a column with a supplied predicate
-//case class MaybeFilter[X, Y](val query: slick.lifted.Query[X, Y, Seq]) {
-//  def filter[T,R:CanBeQueryCondition](data: Option[T])(f: T => X => R) = {
-//    data.map(v => MaybeFilter(query.filter(f(v)))).getOrElse(this)
-//  }
-//}
-
-
-//case class OptionFilter[ X, Y ]( query: Query[ X, Y, Seq ] ) {
-//  def filteredBy[ T ]( op: Option[ T ] )( f: ( X, T ) => Column[ Option[ Boolean ] ] ): Query[ X, Y, Seq ] = {
-//    op map { o => query.filter( f( _, o ) ) } getOrElse { query }
-//  }
-//
-//  def foundBy[ T ]( op: Option[ T ] )( f: ( X, T ) => Column[ Option[ Boolean ] ] ): Query[ X, Y, Seq ] = {
-//    op map { o => query.filter( f( _, o ) ) } getOrElse { query.take( 0 ) }
-//  }
-//}
 
 /**
   * Give access to the flight object using Slick
@@ -61,8 +31,7 @@ class FlightDAOImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProv
         Flight(
           flight.id,
           flight.flightNumber,
-          flight.airlineCode,
-          flight.airlineName,
+          flight.airlineId,
           flight.departureLocation,
           flight.departureDay,
           flight.departureTime,
@@ -76,41 +45,23 @@ class FlightDAOImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProv
     }
   }
 
-
-
-//  def userNameByIDRange(min: Rep[Int], max: Rep[Int]) =
-//    for {
-//      u <- users if u.id >= min && u.id < max
-//    } yield u.first
-//
-//  val userNameByIDRangeCompiled = Compiled(userNameByIDRange _)
-//
-//  // The query will be compiled only once:
-//  val namesAction1 = userNameByIDRangeCompiled(2, 5).result
-//  val namesAction2 = userNameByIDRangeCompiled(1, 3).result
-//
-//
-//  def flightByDestAndOrigin(from: Option[String], to: Option[String]) =
-//    data.filter { d =>
-//      (Case.If(min.isDefined) Then d.id >= min Else True) &&
-//        (Case.If(max.isDefined) Then d.id <= max Else True)
-//    }
-
   /**
     * Search for flights.
     *
     * @param
     * @return The found flights or None if no flight(s) were found matching search criteria.
     */
-  def search(departureLocation: Option[String], arrivalLocation: Option[String]) = {
+  def search(departureLocation: Option[Int], arrivalLocation: Option[Int]) = {
 
-    println(departureLocation)
-    println(arrivalLocation)
+//    val query = slickFlights.filter(flight =>
+//      departureLocation.map {
+//        param => param === flight.departureLocation
+//      })
 
-    val query = slickFlights.filter(f =>
-      f.departureLocation === departureLocation &&
-      f.arrivalLocation === arrivalLocation
-    )
+    val query = slickFlights.filter(flight =>
+          flight.departureLocation === departureLocation &&
+          flight.arrivalLocation === arrivalLocation
+        )
 
     val action = query.result
     val sql = action.statements.head
@@ -131,8 +82,7 @@ class FlightDAOImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProv
     val dbFlight = Flight(
       flight.id,
       flight.flightNumber,
-      flight.airlineCode,
-      flight.airlineName,
+      flight.airlineId,
       flight.departureLocation,
       flight.departureDay,
       flight.departureTime,
@@ -158,5 +108,4 @@ class FlightDAOImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProv
     * @return A future to wait for the process to be completed.
     */
   def remove(id: Int): Future[Unit] = db.run(queryById(id).delete).map(_ => ())
-    //db.run(slickFlights.filter(_.id === id).delete).map(_ => ())
 }

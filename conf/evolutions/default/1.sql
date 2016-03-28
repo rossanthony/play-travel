@@ -1,6 +1,24 @@
 # --- !Ups
 
-create table `user` (`userID` VARCHAR(254) NOT NULL,`firstName` VARCHAR(254),`lastName` VARCHAR(254),`fullName` VARCHAR(254),`email` VARCHAR(254),`avatarURL` VARCHAR(254), PRIMARY KEY (`userID`));
+create table `user` (
+  `userID` VARCHAR(254) NOT NULL,
+  `firstName` VARCHAR(254),
+  `lastName` VARCHAR(254),
+  `fullName` VARCHAR(254),
+  `email` VARCHAR(254),
+  `avatarURL` VARCHAR(254),
+  `addressLine1` VARCHAR(254) DEFAULT NULL,
+  `addressLine2` VARCHAR(254) DEFAULT NULL,
+  `townCity` VARCHAR(254) DEFAULT NULL,
+  `country` VARCHAR(254) DEFAULT NULL,
+  `postcode` VARCHAR(254) DEFAULT NULL,
+  `telephone` VARCHAR(254) DEFAULT NULL,
+  `cardType` VARCHAR(254) DEFAULT NULL,
+  `cardNumber` INTEGER DEFAULT NULL,
+  `expDate` INTEGER DEFAULT NULL,
+  PRIMARY KEY (`userID`)
+);
+
 create table `logininfo` (`id` BIGINT NOT NULL AUTO_INCREMENT,`providerID` VARCHAR(254) NOT NULL,`providerKey` VARCHAR(254) NOT NULL, PRIMARY KEY (`id`));
 create table `userlogininfo` (`userID` VARCHAR(254) NOT NULL,`loginInfoId` BIGINT NOT NULL);
 create table `passwordinfo` (`hasher` VARCHAR(254) NOT NULL,`password` VARCHAR(254) NOT NULL,`salt` VARCHAR(254),`loginInfoId` BIGINT NOT NULL);

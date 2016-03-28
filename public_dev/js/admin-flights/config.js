@@ -4,8 +4,7 @@ angular.module(
     "PlayTravelApp.admin-flights",
     [
         "PlayTravelApp.admin-flights.controllers",
-        "PlayTravelApp.admin-flights.services",
-        "PlayTravelApp.admin-flights.tpls"
+        "PlayTravelApp.admin-flights.services"
     ]
 )
     .config(['$stateProvider', function ($stateProvider) {

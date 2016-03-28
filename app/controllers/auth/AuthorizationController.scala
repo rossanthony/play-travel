@@ -50,7 +50,7 @@ class AuthorizationController @Inject() (
         case Some(user) =>
           Future.successful(
             BadRequest(
-              Map[String, Any]("status" -> false,
+              Map[String, Any]("status" -> "KO",
                 "message" -> Messages("user.exists")).toJson)
               .as("application/json"))
         case None =>
@@ -62,7 +62,10 @@ class AuthorizationController @Inject() (
             lastName = Some(data.lastName),
             fullName = Some(data.firstName + " " + data.lastName),
             email = Some(data.email),
-            avatarURL = None)
+            avatarURL = None,
+            // All other fields, address, credit card, etc are Null for now...
+            None, None, None, None, None, None, None, None, None
+          )
           for {
             avatar <- avatarService.retrieveURL(data.email)
             user <- userService.save(user.copy(avatarURL = avatar))
@@ -72,7 +75,7 @@ class AuthorizationController @Inject() (
             result <- env.authenticatorService.
               embed(
                 value,
-                Ok(Map[String, Any]("status" -> true,
+                Ok(Map[String, Any]("status" -> "OK",
                   "token" -> value).toJson)
                   .as("application/json"))
           } yield {
@@ -85,24 +88,43 @@ class AuthorizationController @Inject() (
       case error =>
         Future.successful(
           InternalServerError(
-            Map[String, Any]("status" -> false,
+            Map[String, Any]("status" -> "KO",
               "message" -> Messages("data.invalid", error)).toJson)
             .as("application/json"))
     }
   }
 
-  def signOut = SecuredAction.async { implicit request =>
-    try {
-      env.eventBus.publish(LogoutEvent(request.identity, request, request2Messages))
-      Future.successful(Ok(Map[String, Any]("status" -> true, "message" -> Messages("user.signout")).toJson))
-    } catch {
-      case t: Throwable =>
-        Future.successful(
-          InternalServerError(
-            Map[String, Any]("status" -> false,
-              "message" -> Messages("user.signout_error", t.getLocalizedMessage)).toJson).
-            as("application/json"))
-    }
+  /**
+    * Returns the user.
+    *
+    * @return The result to display.
+    */
+  def getMe = UserAwareAction.async { implicit request =>
+    Future.successful({
+      request.identity match {
+        case Some(user) =>
+          Ok(Map[String, Any](
+            "status" -> "OK",
+            "displayName" -> user.fullName,
+            "firstName" -> user.firstName,
+            "lastName" -> user.lastName,
+            "email" -> user.email
+          ).toJson)
+        case None =>
+          Unauthorized(
+            Map[String, Any](
+              "status" -> false,
+              "message" -> "user.not_authorizaed"
+            ).toJson)
+      }
+    }.as("application/json"))
   }
 
+  /**
+    * Manages the sign out action.
+    */
+  def signOut = SecuredAction.async { implicit request =>
+    env.eventBus.publish(LogoutEvent(request.identity, request, request2Messages))
+    env.authenticatorService.discard(request.authenticator, Ok)
+  }
 }

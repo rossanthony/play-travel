@@ -1,28 +1,49 @@
+
+<md-toolbar class="md-table-toolbar md-default" ng-hide="selected.length || filter.show">
+    <div class="md-toolbar-tools">
+        <h2 class="md-title">Search for flights</h2>
+        <div flex></div>
+    </div>
+</md-toolbar>
+
+<br/>
+
 <div class="panel panel-default">
     <div class="panel-body form-inline">
-        Search for flights
-
         <form name="searchForm" ng-model="searchForm" ng-submit="submit()">
-            <span class="input-group">
-                <input type="text" class="form-control" uib-datepicker-popup="dd-MM-yyyy" ng-click="datepicker1 = !datepicker1" ng-model="dateFrom" show-weeks="false" is-open="datepicker1" datepicker-options="dateOptions" close-text="Close" />
-                <span class="input-group-btn">
-                    <button type="button" class="btn btn-link" ng-click="datepicker1 = !datepicker1" ><i class="fa fa-calendar"></i></button>
+
+            <div class="form-group checkbox">
+                <input type="checkbox" id="return" checked="checked" />
+                <label for="return">Return</label>
+            </div>
+
+            <div class="form-row">
+                <span class="input-group">
+                    <input type="text" class="form-control" uib-datepicker-popup="dd-MM-yyyy" ng-click="datepicker1 = !datepicker1" ng-model="dateFrom" show-weeks="false" is-open="datepicker1" datepicker-options="dateOptions" close-text="Close" placeholder="Departure date"/>
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-link" ng-click="datepicker1 = !datepicker1" ><i class="fa fa-calendar"></i></button>
+                    </span>
                 </span>
-            </span>
-
-            to &nbsp;&nbsp;&nbsp;&nbsp;
-
-            <span class="input-group">
-                <input type="text" class="form-control" uib-datepicker-popup="dd-MM-yyyy" ng-click="datepicker2 = !datepicker2" ng-model="dateTo" show-weeks="false" is-open="datepicker2" datepicker-options="dateOptions" close-text="Close" />
-                <span class="input-group-btn">
-                    <button type="button" class="btn btn-link" ng-click="datepicker2 = !datepicker2"><i class="fa fa-calendar"></i></button>
+                &nbsp;
+                <span class="input-group">
+                    <input type="text" class="form-control" uib-datepicker-popup="dd-MM-yyyy" ng-click="datepicker2 = !datepicker2" ng-model="dateTo" show-weeks="false" is-open="datepicker2" datepicker-options="dateOptions" close-text="Close" placeholder="Return date"/>
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-link" ng-click="datepicker2 = !datepicker2"><i class="fa fa-calendar"></i></button>
+                    </span>
                 </span>
-            </span>
+            </div>
 
-            <button class="btn btn-default btn-sm" ng-disabled="dataLoading" ng-click="(!dataLoading) ? reloadData() : null">
-                <i class="fa fa-refresh" ng-class="{'fa-spin': dataLoading}"></i>
-            </button>
+            <div class="form-row">
+                <span class="input-group">
+                    <input type="text" class="form-control" ng-click="" ng-model="departureLocation" placeholder="Departure location"/>
+                </span>
+                &nbsp;
+                <span class="input-group">
+                    <input type="text" class="form-control" ng-click="" ng-model="arrivalLocation" placeholder="Destination location"/>
+                </span>
+            </div>
 
+            <button type="submit" class="btn btn-raised btn-default">Submit</button>
         </form>
     </div>
 </div>

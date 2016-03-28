@@ -5,28 +5,14 @@ import javax.inject.Inject
 import com.mohiva.play.silhouette.api.{ Environment, Silhouette }
 import com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticator
 import com.mohiva.play.silhouette.impl.providers.SocialProviderRegistry
-
 import models.User
 import models.services.{FlightServiceImpl, FlightService}
 import play.api.i18n.MessagesApi
 import utils.StringHelper.ToJson
 import play.api.mvc._
-import play.api.mvc._
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
-
-
-import javax.inject.Inject
-
-import com.mohiva.play.silhouette.api.{ Environment, LogoutEvent, Silhouette }
-import com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticator
-import com.mohiva.play.silhouette.impl.providers.SocialProviderRegistry
-import models.User
-import play.api.i18n.MessagesApi
 import play.api.libs.json.Json
-import utils.StringHelper.ToJson
-import play.api.mvc._
-
 import scala.concurrent.Future
 
 /**
@@ -80,14 +66,14 @@ class FlightController @Inject() (
     val params = request.queryString.map { case (k,v) => k -> v.mkString }
 
 
-    var arrivalLocation = None: Option[String]
+    var arrivalLocation = None: Option[Int]
     if (params.contains("arrivalLocation")) {
-      arrivalLocation = Some(params("arrivalLocation").toString)
+      arrivalLocation = Some(params("arrivalLocation").toInt)
     }
 
-    var departureLocation = None: Option[String]
+    var departureLocation = None: Option[Int]
     if (params.contains("departureLocation")) {
-      departureLocation = Some(params("departureLocation").toString)
+      departureLocation = Some(params("departureLocation").toInt)
     }
 
     val resultingFlights = flightService.search(departureLocation, arrivalLocation)

@@ -16,8 +16,8 @@
             <li><a href="#">Bookings</a></li>
         </ul>
         <ul class="nav navbar-nav pull-right">
-            <li ng-show="trainingInProgress"><a ui-sref="admin.current-classifier" class="navAttention" tooltip-placement="bottom" uib-tooltip="Classifier is in training"><i class="fa fa-history"></i></a></li>
-            <li ng-show="batchAvailable"><a ui-sref="admin.current-classifier" class="navAttention" tooltip-placement="bottom" uib-tooltip="There are available tasks in the batch"><i class="fa fa-list"></i></a></li>
+            <li><a>Hello {{uiData.displayName}}</a></li>
+            <li><a href="/auth/sign-out">Logout</a></li>
         </ul>
     </div>
 </nav>

@@ -41,40 +41,6 @@ class ApplicationController @Inject() (
   }
 
   /**
-    * Returns the user.
-    *
-    * @return The result to display.
-    */
-//  def user = SecuredAction.async { implicit request =>
-//    Future.successful(Ok(Json.toJson(request.identity)))
-//  }
-  def getMe = UserAwareAction.async { implicit request =>
-    Future.successful({
-      request.identity match {
-        case Some(user) =>
-          Ok(Map[String, Any](
-            "status" -> true,
-            "message" -> s"Hello, ${user.fullName} <${user.email}>"
-          ).toJson)
-        case None =>
-          Unauthorized(
-            Map[String, Any](
-              "status" -> false,
-              "message" -> "user.not_authorizaed"
-            ).toJson)
-      }
-    }.as("application/json"))
-  }
-
-  /**
-    * Manages the sign out action.
-    */
-  def signOut = SecuredAction.async { implicit request =>
-    env.eventBus.publish(LogoutEvent(request.identity, request, request2Messages))
-    env.authenticatorService.discard(request.authenticator, Ok)
-  }
-
-  /**
     * Provides the desired template.
     *
     * @param template The template to provide.

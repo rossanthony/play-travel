@@ -17,10 +17,17 @@ angular.module('PlayTravelApp.admin-flights.controllers', [])
             rowSelection: true
         };
 
+        $scope.filter = {
+            options: {
+                debounce: 500
+            }
+        };
+
         $scope.query = {
             order: 'departureLocation',
             limit: 5,
-            page: 1
+            page: 1,
+            filter: ''
         };
 
         function getFlights(query) {

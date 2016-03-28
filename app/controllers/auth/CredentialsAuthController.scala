@@ -67,10 +67,11 @@ class CredentialsAuthController @Inject() (
               env.eventBus.publish(LoginEvent(user, request, request2Messages))
               env.authenticatorService.init(authenticator).flatMap { v =>
                 env.authenticatorService.embed(v,
-                  Ok(Map[String, Any]("status" -> true,
-                    "token" -> v).
-                    toJson)
-                    .as("application/json"))
+                  Ok(Map[String, Any](
+                    "status" -> "OK",
+                    "token" -> v,
+                    "displayName" -> user.fullName
+                  ).toJson).as("application/json"))
               }
             }
           case None =>

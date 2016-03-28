@@ -24,7 +24,8 @@ class FlightServiceImpl @Inject() (flightDAO: FlightDAO) extends FlightService {
 
   def getAllFlights: Future[Seq[Flight]] = flightDAO.getAllFlights
 
-  def search(departureLocation: Option[String], arrivalLocation: Option[String]): Future[Seq[Flight]] = flightDAO.search(departureLocation: Option[String], arrivalLocation: Option[String])
+  def search(departureLocation: Option[Int], arrivalLocation: Option[Int]): Future[Seq[Flight]] =
+    flightDAO.search(departureLocation: Option[Int], arrivalLocation: Option[Int])
 
   /**
     * Saves a flight.

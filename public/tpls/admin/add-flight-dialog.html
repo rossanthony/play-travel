@@ -1,7 +1,7 @@
 <md-dialog add-item-dialog>
     <md-dialog-content class="md-dialog-content">
 
-        <h2 class="md-title">Add Dessert</h2>
+        <h2 class="md-title">Add Flight</h2>
 
         <p ng-if="item.form.$submitted && item.form.$invalid" class="md-warn" layout="row" layout-align="start center">
             <i class="material-icons">error_outline</i>
@@ -11,14 +11,27 @@
         <form name="item.form" ng-submit="ctrl.addItem()">
             <div layout="row" class="input-row">
                 <md-input-container flex>
-                    <label>Name</label>
-                    <input name="name" ng-model="dessert.name" md-maxlength="20" required>
+                    <label>Flight no.</label>
+                    <input name="name" ng-model="flight.flightNumber" type="number" max="999" required>
                 </md-input-container>
                 <md-input-container flex>
-                    <label>Calories</label>
-                    <input name="calories" type="number" min="0" max="999" ng-model="dessert.calories.value" required>
+                    <label>Airline code</label>
+                    <input name="name" ng-model="flight.airlineCode" type="text" md-minlength="3" md-maxlength="3" required>
                 </md-input-container>
             </div>
+            <div layout="row" class="input-row">
+                <md-input-container flex>
+                    <label>Flight no.</label>
+                    <input name="name" ng-model="flight.flightNumber" type="number" max="999" required>
+                </md-input-container>
+                <md-input-container flex>
+                    <label>Airline code</label>
+                    <input name="name" ng-model="flight.airlineCode" type="text" md-minlength="3" md-maxlength="3" required>
+                </md-input-container>
+            </div>
+
+
+
             <h3 class="md-subhead">Macronutrients</h3>
             <div layout="row" class="input-row">
                 <md-input-container flex>

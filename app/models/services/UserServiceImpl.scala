@@ -50,7 +50,16 @@ class UserServiceImpl @Inject() (userDAO: UserDAO) extends UserService {
           lastName = profile.lastName,
           fullName = profile.fullName,
           email = profile.email,
-          avatarURL = profile.avatarURL
+          avatarURL = profile.avatarURL,
+          addressLine1 = user.addressLine1,
+          addressLine2 = user.addressLine2,
+          townCity = user.townCity,
+          country = user.country,
+          postcode = user.postcode,
+          telephone = user.telephone,
+          cardType = user.cardType,
+          cardNumber = user.cardNumber,
+          expDate = user.expDate
         ))
       case None => // Insert a new user
         userDAO.save(User(
@@ -60,7 +69,9 @@ class UserServiceImpl @Inject() (userDAO: UserDAO) extends UserService {
           lastName = profile.lastName,
           fullName = profile.fullName,
           email = profile.email,
-          avatarURL = profile.avatarURL
+          avatarURL = profile.avatarURL,
+          // All other fields will be Null at this point...
+          None, None, None, None, None, None, None, None, None
         ))
     }
   }

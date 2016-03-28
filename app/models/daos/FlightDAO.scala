@@ -20,7 +20,7 @@ trait FlightDAO {
   def getAllFlights: Future[Seq[Flight]]
 
 
-  def search(departureLocation: Option[String], arrivalLocation: Option[String]): Future[Seq[Flight]]
+  def search(departureLocation: Option[Int], arrivalLocation: Option[Int]): Future[Seq[Flight]]
 
   /**
     * Saves a flight.

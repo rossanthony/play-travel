@@ -22,85 +22,45 @@ angular.module('PlayTravelApp', [
     //App
     'PlayTravelApp.controllers',
     'PlayTravelApp.services',
-    'PlayTravelApp.tpls',
 
     //App Pages
     'PlayTravelApp.admin-flights',
-    'PlayTravelApp.ui-search'
+    'PlayTravelApp.ui-search',
+    'PlayTravelApp.auth'
 ])
     .config(['$stateProvider','$urlRouterProvider', '$httpProvider', '$authProvider', '$alertProvider', function ($stateProvider, $urlRouterProvider, $httpProvider, $authProvider, $alertProvider) {
 
-        //$urlRouterProvider.when("", "/");
-        //$urlRouterProvider.when("/", "/dashboard");
-
-        //$stateProvider
-        //    // All app states loaded in index.html
-        //    .state('login', { url: '/login', templateUrl: '/assets/tpls/login.html', controller: 'LoginCtrl'})
-        //    .state('admin', { url: '/admin', abstract: true, templateUrl: '/assets/tpls/admin-layout.html', controller: 'AdminCtrl',
-        //        resolve: {
-        //            UiData: function (UiData) {
-        //                return UiData();
-        //            }
-        //        }
-        //    })
-        //    .state('404', { url: '/404', templateUrl: '/assets/tpls/404.html', controller: 'NotFoundCtrl'})
-        //;
-
-        $urlRouterProvider.otherwise('/404');
+        $urlRouterProvider
+            .when("",  "/search")
+            .when("/",  "/search")
+            .when("/search/",  "/search")
+            .when("/admin",  "/admin/flights")
+            .when("/admin/", "/admin/flights")
+            .otherwise(function($injector, $location){
+                var state = $injector.get('$state');
+                state.go('404.not-found');
+                return $location.path();
+            });
 
         $stateProvider
+            .state('ui', { url: '', abstract: true, templateUrl: '/assets/tpls/ui-layout.html', controller: 'UiCtrl'})
+            .state('auth', { url: '/auth', abstract: true, templateUrl: '/assets/tpls/ui-layout.html', controller: 'AuthCtrl'})
             .state('admin', { url: '/admin', abstract: true, templateUrl: '/assets/tpls/admin-layout.html', controller: 'AdminCtrl', resolve: {
                 authenticated: function($q, $location, $auth) {
                     var deferred = $q.defer();
-
-                    if (!$auth.isAuthenticated()) {
+                    if (!$auth.isAuthenticated())
                         $location.path('/signIn');
-                    } else {
+                    else
                         deferred.resolve();
-                    }
-
                     return deferred.promise;
                 },
                 UiData: function (UiData) {
                     return UiData();
                 }
             }})
-            .state('signUp', {
-                url: '/signUp',
-                templateUrl: '/views/signUp.html',
-                controller: function($scope, $alert, $auth) {
-                    /**
-                     * The submit method.
-                     */
-                    $scope.submit = function(event) {
-                        event.preventDefault();
-
-                        $auth.signup({
-                            firstName: $scope.firstName,
-                            lastName: $scope.lastName,
-                            email: $scope.email,
-                            password: $scope.password
-                        }).then(function() {
-                            $alert({
-                                content: 'You have successfully signed up',
-                                animation: 'fadeZoomFadeDown',
-                                type: 'material',
-                                duration: 3
-                            });
-                        }).catch(function(response) {
-                            $alert({
-                                content: response.data.message,
-                                animation: 'fadeZoomFadeDown',
-                                type: 'material',
-                                duration: 3
-                            });
-                        });
-                    };
-                }
-            })
-            .state('signIn', { url: '/signIn', templateUrl: '/views/signIn.html', controller: 'SignInCtrl' })
-            .state('signOut', { url: '/signOut', template: null,  controller: 'SignOutCtrl' })
-            .state('404', { url: '/404', templateUrl: '/assets/tpls/404.html', controller: 'NotFoundCtrl'});
+            .state('404', {  abstract: true, templateUrl: '/assets/tpls/ui-layout.html'})
+            .state('404.not-found', { templateUrl: '/assets/tpls/404.html'})
+        ;
     }])
     .config(['$locationProvider', function ($locationProvider) {
         $locationProvider.html5Mode(true);
@@ -120,7 +80,6 @@ angular.module('PlayTravelApp', [
                     if ($auth.isAuthenticated()) {
                         request.headers['X-Auth-Token'] = $auth.getToken();
                     }
-
                     // Add CSRF token for the Play CSRF filter
                     var cookies = $injector.get('$cookies');
                     var token = cookies.get('PLAY_CSRF_TOKEN');
@@ -129,100 +88,34 @@ angular.module('PlayTravelApp', [
                         // https://www.playframework.com/documentation/2.4.x/ScalaCsrf
                         request.headers['Csrf-Token'] = token;
                     }
-
                     return request;
                 },
-
                 responseError: function(rejection) {
+                    if(rejection.status === 404) {
+                        $injector.get('$state').go('404.not-found');
+                    }
                     if (rejection.status === 401) {
                         var $auth = $injector.get('$auth');
                         $auth.logout();
-                        $injector.get('$state').go('signIn');
+                        $injector.get('$state').go('auth.signIn');
                     }
                     return $q.reject(rejection);
                 }
             };
         });
-
         // Auth config
         $authProvider.httpInterceptor = true; // Add Authorization header to HTTP request
         $authProvider.loginOnSignup = true;
         $authProvider.loginRedirect = '/admin/flights';
-        $authProvider.logoutRedirect = '/signIn';
-        $authProvider.signupRedirect = '/admin';
-        $authProvider.loginUrl = '/signIn';
-        $authProvider.signupUrl = '/signUp';
-        $authProvider.loginRoute = '/signIn';
-        $authProvider.signupRoute = '/signUp';
+        $authProvider.logoutRedirect = '/auth/sign-in';
+        $authProvider.signupRedirect = '/user/account';
+        $authProvider.loginUrl = '/api/auth/sign-in';
+        $authProvider.signupUrl = '/api/auth/sign-up';
+        $authProvider.loginRoute = '/auth/sign-in';
+        $authProvider.signupRoute = '/auth/sign-up';
         $authProvider.tokenName = 'token';
         $authProvider.tokenPrefix = 'satellizer'; // Local Storage name prefix
         $authProvider.authHeader = 'X-Auth-Token';
         $authProvider.platform = 'browser';
         $authProvider.storage = 'localStorage';
-    }])
-    //.config(['$httpProvider', function($httpProvider) {
-    //    $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
-    //    $httpProvider.defaults.headers.put['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
-    //
-    //    /**
-    //     * The workhorse; converts an object to x-www-form-urlencoded serialization.
-    //     * @param {Object} obj
-    //     * @return {String}
-    //     */
-    //    var param = function(obj) {
-    //        var query = '', name, value, fullSubName, subName, subValue, innerObj, i;
-    //
-    //        for(name in obj) {
-    //            value = obj[name];
-    //
-    //            if(value instanceof Array) {
-    //                for(i=0; i<value.length; ++i) {
-    //                    subValue = value[i];
-    //                    fullSubName = name + '[' + i + ']';
-    //                    innerObj = {};
-    //                    innerObj[fullSubName] = subValue;
-    //                    query += param(innerObj) + '&';
-    //                }
-    //
-    //                if (value.length == 0) {
-    //                    query += encodeURIComponent(name) + '=' + '&';
-    //                }
-    //            }
-    //            else if(value instanceof Object) {
-    //                for(subName in value) {
-    //                    subValue = value[subName];
-    //                    fullSubName = name + '[' + subName + ']';
-    //                    innerObj = {};
-    //                    innerObj[fullSubName] = subValue;
-    //                    query += param(innerObj) + '&';
-    //                }
-    //            }
-    //            else if(value !== undefined && value !== null)
-    //                query += encodeURIComponent(name) + '=' + encodeURIComponent(value) + '&';
-    //        }
-    //
-    //        return query.length ? query.substr(0, query.length - 1) : query;
-    //    };
-    //
-    //    // Override $http service's default transformRequest
-    //    $httpProvider.defaults.transformRequest = [function(data) {
-    //        return angular.isObject(data) && String(data) !== '[object File]' ? param(data) : data;
-    //    }];
-    //}])
-    //.config(['$httpProvider', function($httpProvider) {
-    //    $httpProvider.defaults.headers.common["X-Requested-With"] = 'XMLHttpRequest';
-    //}])
-    .run(['$rootScope', '$state', function ($rootScope, $state) {
-
-        //IE8 fix for non-existent indexOf extension
-        if (!Array.prototype.indexOf) {
-            Array.prototype.indexOf = function (obj, start) {
-                for (var i = (start || 0), j = this.length; i < j; i++) {
-                    if (this[i] === obj) {
-                        return i;
-                    }
-                }
-                return -1;
-            }
-        }
     }]);

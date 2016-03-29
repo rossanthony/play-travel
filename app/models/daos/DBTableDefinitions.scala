@@ -1,6 +1,6 @@
 package models.daos
 
-import models.{User, Flight, Ticket, Booking}
+import models.{Airline, Airport, Flight, Ticket, Booking}
 import com.mohiva.play.silhouette.api.LoginInfo
 import slick.driver.JdbcProfile
 import slick.lifted.ProvenShape.proveShapeOf
@@ -48,6 +48,31 @@ trait DBTableDefinitions {
     def created = column[Timestamp]("created", SqlType("timestamp not null default CURRENT_TIMESTAMP"))
     def updated = column[Timestamp]("updated", SqlType("timestamp not null default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP"))
     def * = (id.?, userId, status, created.?, updated.?) <> ((Booking.apply _).tupled, Booking.unapply)
+  }
+
+  class Airlines(tag: Tag) extends Table[Airline](tag, "airline") {
+    def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
+    def iata = column[String]("iata")
+    def icao = column[String]("icao")
+    def airlineName = column[String]("airlineName")
+    def countryName = column[String]("countryName")
+    def * = (id.?, iata, icao, airlineName, countryName) <> ((Airline.apply _).tupled, Airline.unapply)
+  }
+
+  class Airports(tag: Tag) extends Table[Airport](tag, "airport") {
+    def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
+    def code = column[String]("code")
+    def name = column[String]("name")
+    def cityCode = column[String]("cityCode")
+    def cityName = column[String]("cityName")
+    def countryName = column[String]("countryName")
+    def countryCode = column[String]("countryCode")
+    def timezone = column[String]("timezone")
+    def lat = column[String]("lat")
+    def lon = column[String]("lon")
+    def numAirports = column[Int]("numAirports")
+    def city = column[Boolean]("city")
+    def * = (id.?, code, name, cityCode, cityName, countryName, countryCode, timezone, lat, lon, numAirports, city) <> ((Airport.apply _).tupled, Airport.unapply)
   }
 
   /**
@@ -202,6 +227,8 @@ trait DBTableDefinitions {
   val slickFlights = TableQuery[Flights]
   val slickTickets = TableQuery[Tickets]
   val slickBookings = TableQuery[Bookings]
+  val slickAirlines = TableQuery[Airlines]
+  val slickAirports = TableQuery[Airports]
 
   // queries used in multiple places
   def loginInfoQuery(loginInfo: LoginInfo) = 

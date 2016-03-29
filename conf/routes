@@ -17,6 +17,10 @@ DELETE  /flight/:id         controllers.FlightController.deleteFlight(id:Int)
 #POST    /flight             controllers.FlightController.createFlight
 #PUT     /flight/:id             controllers.FlightController.updateFlight(id:Int)
 
+GET     /airline             controllers.AirlineController.getAllAirlines
+GET     /airport             controllers.AirportController.getAllAirports
+
+
 GET     /assets/*file       controllers.Assets.at(path="/public", file)
 
 

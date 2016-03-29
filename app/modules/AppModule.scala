@@ -1,8 +1,8 @@
 package modules
 
 import com.google.inject.AbstractModule
-import models.daos.{FlightDAOImpl, FlightDAO}
-import models.services.{FlightServiceImpl, FlightService}
+import models.daos._
+import models.services._
 import net.codingwell.scalaguice.ScalaModule
 
 /**
@@ -18,7 +18,11 @@ import net.codingwell.scalaguice.ScalaModule
 class AppModule extends AbstractModule with ScalaModule {
 
   override def configure() = {
+    bind[AirlineDAO].to[AirlineDAOImpl]
+    bind[AirportDAO].to[AirportDAOImpl]
     bind[FlightDAO].to[FlightDAOImpl]
+    bind[AirlineService].to[AirlineServiceImpl]
+    bind[AirportService].to[AirportServiceImpl]
     bind[FlightService].to[FlightServiceImpl]
   }
 

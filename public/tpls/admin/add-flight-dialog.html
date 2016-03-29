@@ -14,11 +14,32 @@
                     <label>Flight no.</label>
                     <input name="name" ng-model="flight.flightNumber" type="number" max="999" required>
                 </md-input-container>
+
+                <md-autocomplete flex required
+                                 md-input-name="autocompleteField"
+                                 md-input-minlength="2"
+                                 md-no-cache="ctrl.noCache"
+                                 md-selected-item="ctrl.selectedItem"
+                                 md-search-text="ctrl.searchText"
+                                 md-items="item in ctrl.querySearch(ctrl.searchText)"
+                                 md-item-text="item.display"
+                                 md-floating-label="Airline">
+                    <md-item-template>
+                        <span md-highlight-text="ctrl.searchText">{{item.display}}</span>
+                    </md-item-template>
+                    <div ng-messages="searchForm.autocompleteField.$error" ng-if="searchForm.autocompleteField.$touched">
+                        <div ng-message="required">A flight <b>must</b> have an airline.</div>
+                        <div ng-message="minlength">Your entry is not long enough.</div>
+                        <div ng-message="maxlength">Your entry is too long.</div>
+                    </div>
+                </md-autocomplete>
+
                 <md-input-container flex>
-                    <label>Airline code</label>
-                    <input name="name" ng-model="flight.airlineCode" type="text" md-minlength="3" md-maxlength="3" required>
+                    <label>Airline</label>
+                    <input name="name" ng-model="flight.airlineId" type="text" md-minlength="3" md-maxlength="3" required>
                 </md-input-container>
             </div>
+
             <div layout="row" class="input-row">
                 <md-input-container flex>
                     <label>Flight no.</label>

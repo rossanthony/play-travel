@@ -4,7 +4,9 @@ import models.Flight
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import javax.inject.Inject
 import play.api.db.slick.DatabaseConfigProvider
+import slick.ast.{BaseTypedType, TypedType}
 import scala.concurrent.Future
+import slick.lifted.LiteralColumn
 
 /**
   * Give access to the flight object using Slick
@@ -53,15 +55,14 @@ class FlightDAOImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProv
     */
   def search(departureLocation: Option[Int], arrivalLocation: Option[Int]) = {
 
-//    val query = slickFlights.filter(flight =>
-//      departureLocation.map {
-//        param => param === flight.departureLocation
-//      })
+    val query = for {
+      flight <- slickFlights.filter(f =>
+        departureLocation.map(d => f.departureLocation === d).getOrElse(slick.lifted.LiteralColumn(true)) &&
+        arrivalLocation.map(a => f.arrivalLocation === a).getOrElse(slick.lifted.LiteralColumn(true))
+      )
+    } yield flight
 
-    val query = slickFlights.filter(flight =>
-          flight.departureLocation === departureLocation &&
-          flight.arrivalLocation === arrivalLocation
-        )
+    // @TODO sort out the join to add info for airline and airport to each flight row
 
     val action = query.result
     val sql = action.statements.head

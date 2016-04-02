@@ -55,20 +55,30 @@ class FlightDAOImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProv
     */
   def search(departureLocation: Option[Int], arrivalLocation: Option[Int]) = {
 
-    val query = for {
-      flight <- slickFlights.filter(f =>
-        departureLocation.map(d => f.departureLocation === d).getOrElse(slick.lifted.LiteralColumn(true)) &&
-        arrivalLocation.map(a => f.arrivalLocation === a).getOrElse(slick.lifted.LiteralColumn(true))
-      )
-    } yield flight
+    val monadicInnerJoin = for {
+      fl <- slickFlights.filter(f =>
+                departureLocation.map(d => f.departureLocation === d).getOrElse(slick.lifted.LiteralColumn(true)) &&
+                arrivalLocation.map(a => f.arrivalLocation === a).getOrElse(slick.lifted.LiteralColumn(true))
+              )
+      al <- slickAirlines if fl.airlineId === al.id
+      //apd <- slickAirports if fl.departureLocation === apd.id // apd = airport departure
+      //apa <- slickAirports if fl.airlineId === apa.id // apd = airport arrival
+    } yield (fl, al)
 
-    // @TODO sort out the join to add info for airline and airport to each flight row
+//    val flights = for {
+//      flight <- monadicInnerJoin.filter(f =>
+//        departureLocation.map(d => f.f.departureLocation === d).getOrElse(slick.lifted.LiteralColumn(true)) &&
+//        arrivalLocation.map(a => f.arrivalLocation === a).getOrElse(slick.lifted.LiteralColumn(true))
+//      )
+//    } yield flight
 
-    val action = query.result
-    val sql = action.statements.head
+
+
+    val actions = monadicInnerJoin.result
+    val sql = actions.statements.head
     println(sql)
 
-    db.run(action)
+    db.run(actions.transactionally)
   }
 
   def getAllFlights = db.run(slickFlights.result)

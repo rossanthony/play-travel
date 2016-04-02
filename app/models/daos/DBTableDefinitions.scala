@@ -1,10 +1,10 @@
 package models.daos
 
-import models.{Airline, Airport, Flight, Ticket, Booking}
+import models.{Airline, Airport, Flight, ScheduledFlight, Ticket, Booking}
 import com.mohiva.play.silhouette.api.LoginInfo
 import slick.driver.JdbcProfile
 import slick.lifted.ProvenShape.proveShapeOf
-import java.sql.Timestamp
+import java.sql.{Date, Timestamp}
 import slick.profile.SqlProfile.ColumnOption.SqlType
 
 
@@ -30,6 +30,15 @@ trait DBTableDefinitions {
     def economyCost = column[Int]("economyCost")
     def businessCost = column[Int]("businessCost")
     def * = (id.?, flightNumber, airlineId, departureLocation, departureDay, departureTime, arrivalLocation, arrivalDay, arrivalTime, economyCost, businessCost) <> ((Flight.apply _).tupled, Flight.unapply)
+  }
+
+  class ScheduledFlights(tag: Tag) extends Table[ScheduledFlight](tag, "scheduled_flight") {
+    def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
+    def flightId = column[Int]("flightId")
+    def date = column[Date]("arrivalTime")
+    def economySeats = column[Int]("economySeats")
+    def businessSeats = column[Int]("businessSeats")
+    def * = (id.?, flightId, date, economySeats, businessSeats) <> ((ScheduledFlight.apply _).tupled, ScheduledFlight.unapply)
   }
 
   class Tickets(tag: Tag) extends Table[Ticket](tag, "ticket") {
@@ -225,6 +234,7 @@ trait DBTableDefinitions {
   val slickOpenIDInfos = TableQuery[OpenIDInfos]
   val slickOpenIDAttributes = TableQuery[OpenIDAttributes]
   val slickFlights = TableQuery[Flights]
+  val slickScheduledFlights = TableQuery[ScheduledFlights]
   val slickTickets = TableQuery[Tickets]
   val slickBookings = TableQuery[Bookings]
   val slickAirlines = TableQuery[Airlines]

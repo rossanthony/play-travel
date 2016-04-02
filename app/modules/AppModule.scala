@@ -21,9 +21,11 @@ class AppModule extends AbstractModule with ScalaModule {
     bind[AirlineDAO].to[AirlineDAOImpl]
     bind[AirportDAO].to[AirportDAOImpl]
     bind[FlightDAO].to[FlightDAOImpl]
+    bind[ScheduledFlightDAO].to[ScheduledFlightDAOImpl]
     bind[AirlineService].to[AirlineServiceImpl]
     bind[AirportService].to[AirportServiceImpl]
     bind[FlightService].to[FlightServiceImpl]
+    bind[ScheduledFlightService].to[ScheduledFlightServiceImpl]
   }
 
 }

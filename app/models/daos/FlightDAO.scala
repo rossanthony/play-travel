@@ -1,6 +1,6 @@
 package models.daos
 
-import models.Flight
+import models.{Flight, Airline, Airport}
 import scala.concurrent.Future
 
 /**
@@ -20,7 +20,9 @@ trait FlightDAO {
   def getAllFlights: Future[Seq[Flight]]
 
 
-  def search(departureLocation: Option[Int], arrivalLocation: Option[Int]): Future[Seq[Flight]]
+  //def search(departureLocation: Option[Int], arrivalLocation: Option[Int]): Future[Seq[Flight]]
+//  def search(departureLocation: Option[Int], arrivalLocation: Option[Int]): Future[Seq[(Int, Int, String, String)]]
+  def search(departureLocation: Option[Int], arrivalLocation: Option[Int]): Future[Seq[(Flight, Airline)]]
 
   /**
     * Saves a flight.

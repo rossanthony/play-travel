@@ -65,19 +65,24 @@ class FlightController @Inject() (
     // gather search criteria from query string
     val params = request.queryString.map { case (k,v) => k -> v.mkString }
 
-
     var arrivalLocation = None: Option[Int]
-    if (params.contains("arrivalLocation")) {
+    if (params.contains("arrivalLocation"))
       arrivalLocation = Some(params("arrivalLocation").toInt)
-    }
 
     var departureLocation = None: Option[Int]
-    if (params.contains("departureLocation")) {
+    if (params.contains("departureLocation"))
       departureLocation = Some(params("departureLocation").toInt)
-    }
+
+    // @TODO add other optional filter params (departure/arrival date/time, )...
 
     val resultingFlights = flightService.search(departureLocation, arrivalLocation)
-    resultingFlights.map(flights => Ok(Map[String, Any]("status" -> "OK", "data" -> flights).toJson))
+
+    resultingFlights.map(flights =>
+      Ok(Map[String, Any](
+        "status" -> "OK",
+        "flights" -> flights.toArray
+      ).toJson)
+    )
   }
 
 }

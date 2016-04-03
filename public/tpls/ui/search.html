@@ -20,26 +20,6 @@
 
             <div class="form-row">
                 <span class="input-group">
-                    <!--<md-datepicker-->
-                            <!--ng-model="query.departureDate"-->
-                            <!--ng-model-options="filter.options"-->
-                            <!--md-placeholder="Enter date"-->
-                    <!--&gt;</md-datepicker>-->
-    <!--<md-datepicker-->
-                   <!--name="dateField"-->
-                   <!--ng-model="query.departureDate"-->
-                   <!--ng-model-options="filter.options"-->
-                   <!--md-placeholder="Enter date"-->
-                   <!--required md-min-date="minDate" md-max-date="maxDate"-->
-                   <!--md-date-filter="onlyWeekendsPredicate"></md-datepicker>-->
-      <!--<div class="validation-messages" ng-messages="myForm.dateField.$error">-->
-          <!--<div ng-message="valid">The entered value is not a date!</div>-->
-          <!--<div ng-message="required">This date is required!</div>-->
-          <!--<div ng-message="mindate">Date is too early!</div>-->
-          <!--<div ng-message="maxdate">Date is too late!</div>-->
-          <!--<div ng-message="filtered">Only weekends are allowed!</div>-->
-      <!--</div>-->
-
                     <input
                             type="text"
                             class="form-control"
@@ -56,7 +36,13 @@
                         <button type="button" class="btn btn-link" ng-click="datepicker1 = !datepicker1"><i class="fa fa-calendar"></i></button>
                     </span>
                 </span>
-                &nbsp;
+
+                <span class="input-group">
+                    <md-time-picker mdp-auto-switch="true" ng-model="currentTime"></md-time-picker>
+                </span>
+            </div>
+
+            <div class="form-row">
                 <span class="input-group">
                     <input
                             type="text"
@@ -100,7 +86,9 @@
             <th md-column><span>Flight no.</span></th>
             <th md-column><span>Airline</span></th>
             <th md-column md-order-by="departureLocation"><span>Departure location</span></th>
-            <th md-column md-order-by="arrivalLocation"><span>Arrival location</span></th>
+            <th md-column md-order-by="departureTime"><span>Departure time</span></th>
+            <th md-column md-order-by="arrivalLocation"><span>Destination location</span></th>
+            <th md-column md-order-by="arrivalTime"><span>Destination time</span></th>
         </tr>
         </thead>
         <tbody md-body>
@@ -108,7 +96,9 @@
             <td md-cell>{{flight._3.iata + (flight._1.flightNumber | numberFixedLen:3)}}</td>
             <td md-cell>{{flight._3.airlineName}}</td>
             <td md-cell>{{flight._4.code}}</td>
+            <td md-cell>{{flight._1.departureTime | fourDigitTime}}</td>
             <td md-cell>{{flight._5.code}}</td>
+            <td md-cell>{{flight._1.arrivalTime | fourDigitTime}}</td>
         </tr>
         </tbody>
     </table>

@@ -44,6 +44,7 @@
     "angular-chart.js": "~0.8.8",
     "satellizer": "^0.14.0",
     "angular-strap": "^2.3.7",
-    "material-design-icons": "^2.2.3"
+    "material-design-icons": "^2.2.3",
+    "mdPickers": "^0.7.2"
   }
 }

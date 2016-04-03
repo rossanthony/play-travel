@@ -100,15 +100,24 @@ class FlightController @Inject() (
     // testVal.getOrElse[String]("")
 
     var departureDate = None: Option[Date]
-    if (params.contains("departureDate")) {
+    if (params.contains("departureDate") && !params("departureDate").isEmpty) {
       try {
-        val pureDate = params("departureDate").split("T")
-        val d = new SimpleDateFormat("yyyy-MM-dd").parse(pureDate(0))
+        val d = new SimpleDateFormat("yyyy-MM-dd").parse(params("departureDate"))
         departureDate = Some(new java.sql.Date(d.getTime))
       } catch {
         case e: Exception => println(s"Exception: $e")
       }
     }
+
+//    var returnDate = None: Option[Date]
+//    if (params.contains("returnDate")) {
+//      try {
+//        val d = new SimpleDateFormat("yyyy-MM-dd").parse(params("returnDate"))
+//        returnDate = Some(new java.sql.Date(d.getTime))
+//      } catch {
+//        case e: Exception => println(s"Exception: $e")
+//      }
+//    }
 
     // @TODO add other optional filter params, departure/arrival date/time, etc...
 

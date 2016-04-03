@@ -11,7 +11,7 @@ angular.module('PlayTravelApp', [
     'ngSanitize',
     'ngCookies',
     'ui.bootstrap',
-    'ui.select',
+    //'ui.select',
     'angular-loading-bar',
     'toastr',
     'satellizer',

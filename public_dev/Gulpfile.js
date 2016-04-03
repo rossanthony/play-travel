@@ -47,6 +47,7 @@ gulp.task('watch-init', function() {
 gulp.task('vendor-js', function () {
     gulp.src(
         [
+            // Angular Core, Modules etc
             'bower_components/angular/angular.min.js',
             'bower_components/angular-animate/angular-animate.min.js',
             'bower_components/angular-strap/dist/angular-strap.min.js',
@@ -58,36 +59,36 @@ gulp.task('vendor-js', function () {
             'bower_components/angular-resource/angular-resource.min.js',
             'bower_components/angular-sanitize/angular-sanitize.min.js',
             'bower_components/angular-touch/angular-touch.min.js',
-            'bower_components/satellizer/satellizer.min.js',
-            'bower_components/angular-material/angular-material.min.js',
-
-            'bower_components/angular-material-data-table/dist/md-data-table.min.js',
             'bower_components/angular-ui-router/release/angular-ui-router.min.js',
-
-            //'node_modules/socket.io-client/socket.io.js',
-            //'bower_components/angular-socket-io/socket.min.js',
-
-            'bower_components/angular-bootstrap/ui-bootstrap.min.js',
-            'bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
-            'bower_components/ui-select/dist/select.min.js',
-
             'bower_components/angular-toastr/dist/angular-toastr.min.js',
             'bower_components/angular-toastr/dist/angular-toastr.tpls.min.js',
+            'bower_components/angular-loading-bar/build/loading-bar.min.js',
 
+            // Required for Auth
+            'bower_components/satellizer/satellizer.min.js',
+
+            // For date/timepickers
+            'bower_components/moment/min/moment.min.js',
+            'bower_components/mdPickers/dist/mdPickers.min.js',
+
+            // Bootstrap
+            'bower_components/angular-bootstrap/ui-bootstrap.min.js',
+            'bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
+            //'bower_components/ui-select/dist/select.min.js',
+
+            // Angular Material modules
+            'bower_components/angular-material/angular-material.min.js',
+            'bower_components/angular-material-data-table/dist/md-data-table.min.js',
             'bower_components/angular-material/modules/js/core/core.min.js',
             'bower_components/angular-material/modules/js/input/input.min.js',
             'bower_components/angular-material/modules/js/checkbox/checkbox.min.js',
-            'bower_components/angular-material/modules/js/switch/switch.min.js',
-            //'bower_components/angular-material/modules/js/sidenav/sidenav.min.js',
+            'bower_components/angular-material/modules/js/switch/switch.min.js'
 
-            'bower_components/Chart.js/src/Chart.Core.js',
-            'bower_components/Chart.js/src/Chart.Bar.js',
-            'bower_components/Chart.js/src/Chart.Doughnut.js',
-            'bower_components/Chart.js/src/Chart.Line.js',
-
-            'bower_components/angular-chart.js/dist/angular-chart.min.js',
-
-            'bower_components/angular-loading-bar/build/loading-bar.min.js'
+            //'bower_components/Chart.js/src/Chart.Core.js',
+            //'bower_components/Chart.js/src/Chart.Bar.js',
+            //'bower_components/Chart.js/src/Chart.Doughnut.js',
+            //'bower_components/Chart.js/src/Chart.Line.js',
+            //'bower_components/angular-chart.js/dist/angular-chart.min.js',
         ]
         )
         .pipe(concat('vendor.min.js'))

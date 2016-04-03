@@ -117,8 +117,8 @@ angular.module('PlayTravelApp.admin-flights.controllers', [])
 
         this.cancel = $mdDialog.cancel;
 
-        function deleteDessert(flight, index) {
-            var deferred = $flights.flights.remove({id: flight.id});
+        function deleteFlight(flight, index) {
+            var deferred = $flights.flights.remove({id: flight._1.id});
 
             deferred.$promise.then(function () {
                 flights.splice(index, 1);
@@ -133,7 +133,7 @@ angular.module('PlayTravelApp.admin-flights.controllers', [])
 
         this.confirm = function () {
             console.log('flights',flights);
-            $q.all(flights.forEach(deleteDessert)).then(onComplete);
+            $q.all(flights.forEach(deleteFlight)).then(onComplete);
         }
     }])
 ;

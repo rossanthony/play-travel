@@ -100,8 +100,8 @@ gulp.task('vendor-js', function () {
 gulp.task('app-js', function () {
     gulp.src(['js/**/*.js'])
         .pipe(concat('app.min.js'))
-        .pipe(ngAnnotate())
-        .pipe(uglify())
+        //.pipe(ngAnnotate())
+        //.pipe(uglify())
         .pipe(gulp.dest('../public/js'));
 });
 

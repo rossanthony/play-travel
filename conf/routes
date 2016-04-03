@@ -2,23 +2,22 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
+POST    /api/v1/auth/sign-up   controllers.auth.AuthorizationController.signUp
+POST    /api/v1/auth/sign-in   controllers.auth.CredentialsAuthController.authenticate
+GET     /api/v1/auth/sign-out  controllers.auth.AuthorizationController.signOut
+GET     /api/v1/auth/user      controllers.auth.AuthorizationController.getMe
 
-POST    /api/auth/sign-up   controllers.auth.AuthorizationController.signUp
-POST    /api/auth/sign-in   controllers.auth.CredentialsAuthController.authenticate
-GET     /api/auth/sign-out  controllers.auth.AuthorizationController.signOut
-GET     /api/auth/user      controllers.auth.AuthorizationController.getMe
-
-GET     /flight/search      controllers.FlightController.search
-GET     /flight             controllers.FlightController.getAllFlights
-GET     /flight/:id         controllers.FlightController.getFlight(id:Int)
+GET     /api/v1/flight/search      controllers.FlightController.search
+GET     /api/v1/flight             controllers.FlightController.getAllFlights
+GET     /api/v1/flight/:id         controllers.FlightController.getFlight(id:Int)
 
 # Authorised Admin only routes
-DELETE  /flight/:id         controllers.FlightController.deleteFlight(id:Int)
-#POST    /flight             controllers.FlightController.createFlight
-#PUT     /flight/:id             controllers.FlightController.updateFlight(id:Int)
+DELETE  /api/v1/flight/:id         controllers.FlightController.deleteFlight(id:Int)
+#POST    /api/v1/flight             controllers.FlightController.createFlight
+#PUT     /api/v1/flight/:id             controllers.FlightController.updateFlight(id:Int)
 
-GET     /airline             controllers.AirlineController.getAllAirlines
-GET     /airport             controllers.AirportController.getAllAirports
+GET     /api/v1/airline             controllers.AirlineController.getAllAirlines
+GET     /api/v1/airport             controllers.AirportController.getAllAirports
 
 
 GET     /assets/*file       controllers.Assets.at(path="/public", file)

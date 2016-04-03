@@ -5,7 +5,7 @@
 angular.module('PlayTravelApp.admin-flights.services', [])
     .factory('$flights', ['$resource', function ($resource) {
         return {
-            flights: $resource('flight/:id')
+            flights: $resource('/api/v1/flight/:id')
         };
     }]);
 

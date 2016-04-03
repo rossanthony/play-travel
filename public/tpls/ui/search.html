@@ -10,7 +10,8 @@
 
 <div class="panel panel-default">
     <div class="panel-body form-inline">
-        <form name="searchForm" ng-model="searchForm" ng-submit="submit()">
+        <!--<form name="searchForm" ng-model="searchForm" ng-submit="submit()">-->
+        <form flex name="filter.form">
 
             <div class="form-group checkbox">
                 <input type="checkbox" id="return" checked="checked" />
@@ -19,31 +20,98 @@
 
             <div class="form-row">
                 <span class="input-group">
-                    <input type="text" class="form-control" uib-datepicker-popup="dd-MM-yyyy" ng-click="datepicker1 = !datepicker1" ng-model="dateFrom" show-weeks="false" is-open="datepicker1" datepicker-options="dateOptions" close-text="Close" placeholder="Departure date"/>
+                    <!--<md-datepicker-->
+                            <!--ng-model="query.departureDate"-->
+                            <!--ng-model-options="filter.options"-->
+                            <!--md-placeholder="Enter date"-->
+                    <!--&gt;</md-datepicker>-->
+    <!--<md-datepicker-->
+                   <!--name="dateField"-->
+                   <!--ng-model="query.departureDate"-->
+                   <!--ng-model-options="filter.options"-->
+                   <!--md-placeholder="Enter date"-->
+                   <!--required md-min-date="minDate" md-max-date="maxDate"-->
+                   <!--md-date-filter="onlyWeekendsPredicate"></md-datepicker>-->
+      <!--<div class="validation-messages" ng-messages="myForm.dateField.$error">-->
+          <!--<div ng-message="valid">The entered value is not a date!</div>-->
+          <!--<div ng-message="required">This date is required!</div>-->
+          <!--<div ng-message="mindate">Date is too early!</div>-->
+          <!--<div ng-message="maxdate">Date is too late!</div>-->
+          <!--<div ng-message="filtered">Only weekends are allowed!</div>-->
+      <!--</div>-->
+
+                    <input
+                            type="text"
+                            class="form-control"
+                            uib-datepicker-popup="dd-MM-yyyy"
+                            ng-model="datepickers.departureDate"
+                            ng-model-options="filter.options"
+                            show-weeks="false"
+                            is-open="datepicker1"
+                            datepicker-options="dateOptions"
+                            close-text="Close"
+                            placeholder="Departure date"
+                    />
                     <span class="input-group-btn">
-                        <button type="button" class="btn btn-link" ng-click="datepicker1 = !datepicker1" ><i class="fa fa-calendar"></i></button>
+                        <button type="button" class="btn btn-link" ng-click="datepicker1 = !datepicker1"><i class="fa fa-calendar"></i></button>
                     </span>
                 </span>
                 &nbsp;
                 <span class="input-group">
-                    <input type="text" class="form-control" uib-datepicker-popup="dd-MM-yyyy" ng-click="datepicker2 = !datepicker2" ng-model="dateTo" show-weeks="false" is-open="datepicker2" datepicker-options="dateOptions" close-text="Close" placeholder="Return date"/>
+                    <input
+                            type="text"
+                            class="form-control"
+                            uib-datepicker-popup="dd-MM-yyyy"
+                            ng-model="datepickers.returnDate"
+                            ng-model-options="filter.options"
+                            show-weeks="false"
+                            is-open="datepicker2"
+                            datepicker-options="dateOptions"
+                            close-text="Close"
+                            placeholder="Return date"
+                    />
                     <span class="input-group-btn">
-                        <button type="button" class="btn btn-link" ng-click="datepicker2 = !datepicker2"><i class="fa fa-calendar"></i></button>
+                        <button type="button" class="btn btn-link"><i class="fa fa-calendar"></i></button>
                     </span>
                 </span>
             </div>
 
             <div class="form-row">
                 <span class="input-group">
-                    <input type="text" class="form-control" ng-click="" ng-model="departureLocation" placeholder="Departure location"/>
+                    <input type="text" class="form-control" ng-click="" ng-model="query.departureLocation" placeholder="Departure location"/>
                 </span>
                 &nbsp;
                 <span class="input-group">
-                    <input type="text" class="form-control" ng-click="" ng-model="arrivalLocation" placeholder="Destination location"/>
+                    <input type="text" class="form-control" ng-click="" ng-model="query.arrivalLocation" placeholder="Destination location"/>
                 </span>
             </div>
 
-            <button type="submit" class="btn btn-raised btn-default">Submit</button>
+            <button type="submit" ng-click="submit()" class="btn btn-raised btn-default">Submit</button>
         </form>
     </div>
 </div>
+
+<h3>Outbound</h3>
+
+<md-table-container>
+    <table md-table md-row-select="options.rowSelection" ng-model="selected" md-progress="promise">
+        <thead md-head md-order="query.order" md-on-reorder="onReorder">
+        <tr md-row>
+            <th md-column><span>Flight no.</span></th>
+            <th md-column><span>Airline</span></th>
+            <th md-column md-order-by="departureLocation"><span>Departure location</span></th>
+            <th md-column md-order-by="arrivalLocation"><span>Arrival location</span></th>
+        </tr>
+        </thead>
+        <tbody md-body>
+        <tr md-row md-select="flight" md-select-id="{{flight.id}}" md-auto-select ng-repeat="flight in flights">
+            <td md-cell>{{flight._3.iata + (flight._1.flightNumber | numberFixedLen:3)}}</td>
+            <td md-cell>{{flight._3.airlineName}}</td>
+            <td md-cell>{{flight._4.code}}</td>
+            <td md-cell>{{flight._5.code}}</td>
+        </tr>
+        </tbody>
+    </table>
+</md-table-container>
+
+<md-table-pagination md-limit="query.limit" md-page="query.page" md-total="{{flights.count}}" md-on-paginate="onPaginate" md-page-select></md-table-pagination>

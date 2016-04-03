@@ -5,18 +5,10 @@ angular.module(
     [
         "PlayTravelApp.ui-search.controllers",
         "PlayTravelApp.ui-search.services"
-    ]
-)
+    ])
     .config(['$stateProvider', function ($stateProvider) {
-
         $stateProvider
-            .state('ui.search', { url: '/search?{items_per_page}&{page}', templateUrl: '/assets/tpls/ui/search.html', controller: 'SearchPageCtrl',
-                resolve: {
-                    SearchData: function (SearchData, $stateParams) {
-                        return SearchData($stateParams);
-                    }
-                }
-            })
+            .state('ui.search', { url: '/search?{items_per_page}&{page}', templateUrl: '/assets/tpls/ui/search.html', controller: 'SearchPageCtrl'})
         ;
     }])
 ;

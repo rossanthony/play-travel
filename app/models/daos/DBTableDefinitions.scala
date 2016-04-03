@@ -109,7 +109,8 @@ trait DBTableDefinitions {
     telephone: Option[String],
     cardType: Option[String],
     cardNumber: Option[Int],
-    expDate: Option[Int]
+    expDate: Option[Int],
+    isAdmin: Boolean
   )
 
   class DBUsers(tag: Tag) extends Table[DBUser](tag, "user") {
@@ -128,8 +129,9 @@ trait DBTableDefinitions {
     def cardType = column[Option[String]]("cardType")
     def cardNumber = column[Option[Int]]("cardNumber")
     def expDate = column[Option[Int]]("expDate")
+    def isAdmin = column[Boolean]("isAdmin")
 
-    def * = (id, firstName, lastName, fullName, email, avatarURL, addressLine1, addressLine2, townCity, country, postcode, telephone, cardType, cardNumber, expDate) <> (DBUser.tupled, DBUser.unapply)
+    def * = (id, firstName, lastName, fullName, email, avatarURL, addressLine1, addressLine2, townCity, country, postcode, telephone, cardType, cardNumber, expDate, isAdmin) <> (DBUser.tupled, DBUser.unapply)
   }
 
   case class DBLoginInfo (

@@ -1,6 +1,7 @@
 package models.daos
 
 import models.{FlightSearchResult, Flight}
+import play.api.Logger
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import javax.inject.Inject
 import play.api.db.slick.DatabaseConfigProvider
@@ -27,25 +28,17 @@ class FlightDAOImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProv
     */
   def find(id: Int) = {
     val flightQuery = for {
-      dbFlight <- slickFlights.filter(_.id === id)
-    } yield dbFlight
-    db.run(flightQuery.result.headOption).map { dbFlightOption =>
-      dbFlightOption.map { flight =>
-        Flight(
-          flight.id,
-          flight.flightNumber,
-          flight.airlineId,
-          flight.departureAirportId,
-          flight.departureDay,
-          flight.departureTime,
-          flight.arrivalAirportId,
-          flight.arrivalDay,
-          flight.arrivalTime,
-          flight.economyCost,
-          flight.businessCost
-        )
-      }
-    }
+      fl <- slickFlights.filter(_.id === id)
+      al <- slickAirlines if fl.airlineId === al.id
+      da <- slickAirports if fl.departureAirportId === da.id // da =  departure airport
+      aa <- slickAirports if fl.arrivalAirportId === aa.id // aa =  arrival airport
+    } yield (fl, al, da, aa)
+
+    val actions = flightQuery.result
+    val sql = actions.statements.head
+    Logger.debug(s"find flight sql: $sql")
+
+    db.run(flightQuery.result.headOption)
   }
 
   /**
@@ -98,7 +91,22 @@ class FlightDAOImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProv
     db.run(actions)
   }
 
-  def getAllFlights = db.run(slickFlights.result)
+//  def getAllFlights = db.run(slickFlights.result)
+  def getAllFlights = {
+    val flightsQuery = for {
+      fl <- slickFlights
+      al <- slickAirlines if fl.airlineId === al.id
+      da <- slickAirports if fl.departureAirportId === da.id // da =  departure airport
+      aa <- slickAirports if fl.arrivalAirportId === aa.id // aa =  arrival airport
+    } yield (fl, al, da, aa)
+
+    val actions = flightsQuery.result
+    val sql = actions.statements.head
+    Logger.debug(s"find all flights sql: $sql")
+
+    db.run(flightsQuery.result)
+  }
+
 
   /**
     * Saves a flight.

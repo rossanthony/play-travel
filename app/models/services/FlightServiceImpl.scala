@@ -19,7 +19,7 @@ class FlightServiceImpl @Inject() (flightDAO: FlightDAO) extends FlightService {
     * @param id The flight id.
     * @return The retrieved flight or None if no flight could be retrieved for the given flight id.
     */
-  def retrieve(id: Int): Future[Option[Flight]] = flightDAO.find(id)
+  def retrieve(id: Int): Future[Option[(Flight, Airline, Airport, Airport)]] = flightDAO.find(id)
 
   /**
     * Delete a flight.
@@ -33,7 +33,7 @@ class FlightServiceImpl @Inject() (flightDAO: FlightDAO) extends FlightService {
     *
     * @return
     */
-  def getAllFlights: Future[Seq[Flight]] = flightDAO.getAllFlights
+  def getAllFlights: Future[Seq[(Flight, Airline, Airport, Airport)]] = flightDAO.getAllFlights
 
 //  def search(departureLocation: Option[Int], arrivalLocation: Option[Int]): Future[Seq[Flight]] =
 //  def search(departureLocation: Option[Int], arrivalLocation: Option[Int]): Future[Seq[(Int, Int, String, String)]] =

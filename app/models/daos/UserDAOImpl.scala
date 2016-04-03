@@ -46,7 +46,8 @@ class UserDAOImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
           user.telephone,
           user.cardType,
           user.cardNumber,
-          user.expDate
+          user.expDate,
+          user.isAdmin
         )
       }
     }
@@ -83,7 +84,8 @@ class UserDAOImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
             user.telephone,
             user.cardType,
             user.cardNumber,
-            user.expDate
+            user.expDate,
+            user.isAdmin
           )
       }
     }
@@ -111,7 +113,8 @@ class UserDAOImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProvid
       user.telephone,
       user.cardType,
       user.cardNumber,
-      user.expDate
+      user.expDate,
+      user.isAdmin
     )
     val dbLoginInfo = DBLoginInfo(None, user.loginInfo.providerID, user.loginInfo.providerKey)
     // We don't have the LoginInfo id so we try to get it first.

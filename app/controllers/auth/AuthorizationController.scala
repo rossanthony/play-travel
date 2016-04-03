@@ -64,7 +64,8 @@ class AuthorizationController @Inject() (
             email = Some(data.email),
             avatarURL = None,
             // All other fields, address, credit card, etc are Null for now...
-            None, None, None, None, None, None, None, None, None
+            None, None, None, None, None, None, None, None, None,
+            isAdmin = false
           )
           for {
             avatar <- avatarService.retrieveURL(data.email)

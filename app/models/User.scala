@@ -41,7 +41,8 @@ case class User(
   telephone: Option[String],
   cardType: Option[String],
   cardNumber: Option[Int],
-  expDate: Option[Int]
+  expDate: Option[Int],
+  isAdmin: Boolean
 ) extends Identity
 
 

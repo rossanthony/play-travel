@@ -15,14 +15,12 @@ trait FlightDAO {
     * @param id The id of the flight.
     * @return The found flight or None if no flight found.
     */
-  def find(id: Int): Future[Option[Flight]]
+  def find(id: Int): Future[Option[(Flight, Airline, Airport, Airport)]]
 
 
-  def getAllFlights: Future[Seq[Flight]]
+  def getAllFlights: Future[Seq[(Flight, Airline, Airport, Airport)]]
 
 
-  //def search(departureLocation: Option[Int], arrivalLocation: Option[Int]): Future[Seq[Flight]]
-//  def search(departureLocation: Option[Int], arrivalLocation: Option[Int]): Future[Seq[(Int, Int, String, String)]]
   def search(
               departureCity: Option[String],
               arrivalCity: Option[String],

@@ -4,7 +4,7 @@
 
 angular.module('PlayTravelApp.services', [])
     .factory('Ui', ['$resource', function ($resource) {
-        return $resource('/api/auth/user');
+        return $resource('/api/v1/auth/user');
     }])
     .factory('UiData', ['$q','Ui', function ($q, Ui) {
         return function () {

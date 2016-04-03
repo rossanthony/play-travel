@@ -3,12 +3,14 @@
 /* Controllers */
 
 angular.module('PlayTravelApp.auth.controllers', [])
-    .controller('SignUpCtrl',['$scope', '$state', '$auth', '$alert', function ($scope, $auth, $alert) {
+    .controller('SignUpCtrl',['$scope', '$auth', '$alert', function ($scope, $auth, $alert) {
         /**
          * The submit method.
          */
         $scope.submit = function(event) {
             event.preventDefault();
+            console.log("Running $auth.signup() ...");
+            console.log("$scope.firstName", $scope.firstName);
 
             $auth.signup({
                 firstName: $scope.firstName,

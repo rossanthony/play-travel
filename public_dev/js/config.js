@@ -22,6 +22,7 @@ angular.module('PlayTravelApp', [
     //App
     'PlayTravelApp.controllers',
     'PlayTravelApp.services',
+    'PlayTravelApp.filters',
 
     //App Pages
     'PlayTravelApp.admin-flights',
@@ -109,8 +110,8 @@ angular.module('PlayTravelApp', [
         $authProvider.loginRedirect = '/admin/flights';
         $authProvider.logoutRedirect = '/auth/sign-in';
         $authProvider.signupRedirect = '/user/account';
-        $authProvider.loginUrl = '/api/auth/sign-in';
-        $authProvider.signupUrl = '/api/auth/sign-up';
+        $authProvider.loginUrl = '/api/v1/auth/sign-in';
+        $authProvider.signupUrl = '/api/v1/auth/sign-up';
         $authProvider.loginRoute = '/auth/sign-in';
         $authProvider.signupRoute = '/auth/sign-up';
         $authProvider.tokenName = 'token';

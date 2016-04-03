@@ -1,7 +1,8 @@
 package models.daos
 
-import models.{Flight, Airline, Airport}
+import models.{Flight, ScheduledFlight, Airline, Airport}
 import scala.concurrent.Future
+import java.sql.Date
 
 /**
   * Give access to the user object.
@@ -22,7 +23,11 @@ trait FlightDAO {
 
   //def search(departureLocation: Option[Int], arrivalLocation: Option[Int]): Future[Seq[Flight]]
 //  def search(departureLocation: Option[Int], arrivalLocation: Option[Int]): Future[Seq[(Int, Int, String, String)]]
-  def search(departureLocation: Option[Int], arrivalLocation: Option[Int]): Future[Seq[(Flight, Airline)]]
+  def search(
+              departureCity: Option[String],
+              arrivalCity: Option[String],
+              departureDate: Option[Date]
+            ): Future[Seq[(Flight, ScheduledFlight, Airline, Airport, Airport)]]
 
   /**
     * Saves a flight.

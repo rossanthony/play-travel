@@ -18,3 +18,5 @@ object ScheduledFlight {
   implicit val writer = Json.writes[ScheduledFlight]
   implicit val reader = Json.reads[ScheduledFlight]
 }
+
+case class FlightSearchResult(f: Flight, sf: ScheduledFlight, a: Airline, da: Airport, aa: Airport)

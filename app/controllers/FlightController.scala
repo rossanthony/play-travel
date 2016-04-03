@@ -1,19 +1,23 @@
 package controllers
 
+import java.text.SimpleDateFormat
 import javax.inject.Inject
 
 import com.mohiva.play.silhouette.api.{ Environment, Silhouette }
 import com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticator
 import com.mohiva.play.silhouette.impl.providers.SocialProviderRegistry
-import models.User
+import models._
 import models.services.{FlightServiceImpl, FlightService}
+import play.api.Logger
 import play.api.i18n.MessagesApi
 import utils.StringHelper.ToJson
 import play.api.mvc._
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
-import play.api.libs.json.Json
-import scala.concurrent.Future
+import play.api.libs.json.{JsValue, JsObject, JsArray, Json}
+import java.sql.Date
+import play.api.http.ContentTypeOf
+
 
 /**
   * The flight controller.
@@ -63,26 +67,38 @@ class FlightController @Inject() (
     */
   def search: Action[AnyContent] = Action.async { implicit request =>
     // gather search criteria from query string
-    val params = request.queryString.map { case (k,v) => k -> v.mkString }
+    val params = request.queryString.map { case (k, v) => k -> v.mkString }
 
-    var arrivalLocation = None: Option[Int]
-    if (params.contains("arrivalLocation"))
-      arrivalLocation = Some(params("arrivalLocation").toInt)
+    var arrivalCity = None: Option[String]
+    if (params.contains("arrivalCity"))
+      arrivalCity = Some(params("arrivalCity"))
 
-    var departureLocation = None: Option[Int]
-    if (params.contains("departureLocation"))
-      departureLocation = Some(params("departureLocation").toInt)
+    var departureCity = None: Option[String]
+    if (params.contains("departureCity"))
+      departureCity = Some(params("departureCity"))
 
-    // @TODO add other optional filter params (departure/arrival date/time, )...
+    // testVal.getOrElse[String]("")
 
-    val resultingFlights = flightService.search(departureLocation, arrivalLocation)
+    var departureDate = None: Option[Date]
+    if (params.contains("departureDate")) {
+      try {
+        val d = new SimpleDateFormat("yyyy-MM-dd").parse(params("departureDate"))
+        departureDate = Some(new java.sql.Date(d.getTime))
+        //println(departureDate)
+      } catch {
+        case e: Exception => println(s"Exception: $e")
+      }
+    }
 
-    resultingFlights.map(flights =>
-      Ok(Map[String, Any](
-        "status" -> "OK",
-        "flights" -> flights.toArray
-      ).toJson)
-    )
+    // @TODO add other optional filter params, departure/arrival date/time, etc...
+
+    flightService.search(departureCity, arrivalCity, departureDate).map(results => {
+      Ok(
+        Map[String, Any](
+          "status" -> "OK",
+          "data" -> results
+        ).toJson
+      ).as("application/json")
+    })
   }
-
 }

@@ -1,7 +1,8 @@
 package models.services
 
-import models.{Flight, Airline}
+import models._
 import scala.concurrent.Future
+import java.sql.Date
 
 /**
   * Handles actions to flights.
@@ -18,7 +19,11 @@ trait FlightService {
 
 //  def search(departureLocation: Option[Int], arrivalLocation: Option[Int]): Future[Seq[Flight]]
 //  def search(departureLocation: Option[Int], arrivalLocation: Option[Int]): Future[Seq[(Int, Int, String, String)]]
-  def search(departureLocation: Option[Int], arrivalLocation: Option[Int]): Future[Seq[(Flight, Airline)]]
+  def search(
+              departureLocation: Option[String],
+              arrivalLocation: Option[String],
+              departureDate: Option[Date]
+            ): Future[Seq[(Flight, ScheduledFlight, Airline, Airport, Airport)]] // (Flight, ScheduledFlight, Airline, Airport, Airport)
 
   /**
     * Delete a flight.

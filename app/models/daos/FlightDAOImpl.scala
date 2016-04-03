@@ -1,12 +1,13 @@
 package models.daos
 
-import models.Flight
+import models.{FlightSearchResult, Flight}
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import javax.inject.Inject
 import play.api.db.slick.DatabaseConfigProvider
 import slick.ast.{BaseTypedType, TypedType}
 import scala.concurrent.Future
 import slick.lifted.LiteralColumn
+import java.sql.Date
 
 /**
   * Give access to the flight object using Slick
@@ -34,10 +35,10 @@ class FlightDAOImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProv
           flight.id,
           flight.flightNumber,
           flight.airlineId,
-          flight.departureLocation,
+          flight.departureAirportId,
           flight.departureDay,
           flight.departureTime,
-          flight.arrivalLocation,
+          flight.arrivalAirportId,
           flight.arrivalDay,
           flight.arrivalTime,
           flight.economyCost,
@@ -53,32 +54,48 @@ class FlightDAOImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProv
     * @param
     * @return The found flights or None if no flight(s) were found matching search criteria.
     */
-  def search(departureLocation: Option[Int], arrivalLocation: Option[Int]) = {
+  def search(
+              departureCity: Option[String],
+              arrivalCity: Option[String],
+              departureDate: Option[Date]
+            ) = {
 
-    val monadicInnerJoin = for {
-      fl <- slickFlights.filter(f =>
-                departureLocation.map(d => f.departureLocation === d).getOrElse(slick.lifted.LiteralColumn(true)) &&
-                arrivalLocation.map(a => f.arrivalLocation === a).getOrElse(slick.lifted.LiteralColumn(true))
-              )
+    val monadicJoin = for {
+      sf <- slickScheduledFlights.filter(a =>
+              departureDate.map(d => a.date === d).getOrElse(slick.lifted.LiteralColumn(true))
+            )
+      fl <- slickFlights if sf.flightId === fl.id
       al <- slickAirlines if fl.airlineId === al.id
-      //apd <- slickAirports if fl.departureLocation === apd.id // apd = airport departure
-      //apa <- slickAirports if fl.airlineId === apa.id // apd = airport arrival
-    } yield (fl, al)
+      //da <- slickAirports if fl.departureAirportId === da.id // da =  departure airport
+      da <- slickAirports.filter(a =>
+              fl.departureAirportId === a.id &&
+              departureCity.map(c => a.cityCode === c).getOrElse(slick.lifted.LiteralColumn(true))
+            )
+      //aa <- slickAirports if fl.arrivalAirportId === aa.id // aa = arrival airport
+      aa <- slickAirports.filter(a =>
+              fl.arrivalAirportId === a.id &&
+              arrivalCity.map(c => a.cityCode === c).getOrElse(slick.lifted.LiteralColumn(true))
+            )
+    } yield (fl, sf, al, da, aa)
 
+    /*
+    Search filters:
+      - departure location, cityName/Code of apd (
+
+     */
 //    val flights = for {
-//      flight <- monadicInnerJoin.filter(f =>
-//        departureLocation.map(d => f.f.departureLocation === d).getOrElse(slick.lifted.LiteralColumn(true)) &&
-//        arrivalLocation.map(a => f.arrivalLocation === a).getOrElse(slick.lifted.LiteralColumn(true))
+//      flight <- slickFlights.filter(f =>
+//        departureAirportId.map(d => f.departureAirportId === d).getOrElse(slick.lifted.LiteralColumn(true)) &&
+//        arrivalAirportId.map(a => f.arrivalAirportId === a).getOrElse(slick.lifted.LiteralColumn(true))
 //      )
 //    } yield flight
 
 
-
-    val actions = monadicInnerJoin.result
+    val actions = monadicJoin.result
     val sql = actions.statements.head
-    println(sql)
+    //println(sql)
 
-    db.run(actions.transactionally)
+    db.run(actions)
   }
 
   def getAllFlights = db.run(slickFlights.result)
@@ -94,10 +111,10 @@ class FlightDAOImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProv
       flight.id,
       flight.flightNumber,
       flight.airlineId,
-      flight.departureLocation,
+      flight.departureAirportId,
       flight.departureDay,
       flight.departureTime,
-      flight.arrivalLocation,
+      flight.arrivalAirportId,
       flight.arrivalDay,
       flight.arrivalTime,
       flight.economyCost,

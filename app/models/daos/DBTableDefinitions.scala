@@ -21,24 +21,30 @@ trait DBTableDefinitions {
     def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
     def flightNumber = column[Int]("flightNumber")
     def airlineId = column[Int]("airlineId")
-    def departureLocation = column[Int]("departureLocation")
+    def departureAirportId = column[Int]("departureAirportId")
     def departureDay = column[Int]("departureDay")
     def departureTime = column[Int]("departureTime")
-    def arrivalLocation = column[Int]("arrivalLocation")
+    def arrivalAirportId = column[Int]("arrivalAirportId")
     def arrivalDay = column[Int]("arrivalDay")
     def arrivalTime = column[Int]("arrivalTime")
     def economyCost = column[Int]("economyCost")
     def businessCost = column[Int]("businessCost")
-    def * = (id.?, flightNumber, airlineId, departureLocation, departureDay, departureTime, arrivalLocation, arrivalDay, arrivalTime, economyCost, businessCost) <> ((Flight.apply _).tupled, Flight.unapply)
+    def * = (id.?, flightNumber, airlineId, departureAirportId, departureDay, departureTime, arrivalAirportId, arrivalDay, arrivalTime, economyCost, businessCost) <> ((Flight.apply _).tupled, Flight.unapply)
+    // Relations
+    def departureAirport = foreignKey("departure_airport_fk", departureAirportId, slickAirports)(_.id)
+    def arrivalAirport = foreignKey("arrival_airport_fk", arrivalAirportId, slickAirports)(_.id)
+    def airline = foreignKey("airline_fk", airlineId, slickAirlines)(_.id)
   }
 
   class ScheduledFlights(tag: Tag) extends Table[ScheduledFlight](tag, "scheduled_flight") {
     def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
     def flightId = column[Int]("flightId")
-    def date = column[Date]("arrivalTime")
+    def date = column[Date]("date")
     def economySeats = column[Int]("economySeats")
     def businessSeats = column[Int]("businessSeats")
     def * = (id.?, flightId, date, economySeats, businessSeats) <> ((ScheduledFlight.apply _).tupled, ScheduledFlight.unapply)
+    // Relations
+    def flight = foreignKey("flight_fk", flightId, slickFlights)(_.id)
   }
 
   class Tickets(tag: Tag) extends Table[Ticket](tag, "ticket") {

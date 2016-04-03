@@ -1,9 +1,10 @@
 package models.services
 
 import javax.inject.Inject
-import models.{Flight, Airline, Airport}
+import models._
 import models.daos.FlightDAO
 import scala.concurrent.Future
+import java.sql.Date
 
 /**
   * Handles actions to flights.
@@ -36,8 +37,17 @@ class FlightServiceImpl @Inject() (flightDAO: FlightDAO) extends FlightService {
 
 //  def search(departureLocation: Option[Int], arrivalLocation: Option[Int]): Future[Seq[Flight]] =
 //  def search(departureLocation: Option[Int], arrivalLocation: Option[Int]): Future[Seq[(Int, Int, String, String)]] =
-  def search(departureLocation: Option[Int], arrivalLocation: Option[Int]): Future[Seq[(Flight, Airline)]] =
-    flightDAO.search(departureLocation: Option[Int], arrivalLocation: Option[Int])
+  def search(
+              departureCity: Option[String],
+              arrivalCity: Option[String],
+              departureDate: Option[Date]
+            ): Future[Seq[(Flight, ScheduledFlight, Airline, Airport, Airport)]] = {
+    flightDAO.search(
+      departureCity: Option[String],
+      arrivalCity: Option[String],
+      departureDate: Option[Date]
+    )
+  }
 
   /**
     * Saves a flight.

@@ -35,8 +35,8 @@ object BuildProject extends Build {
         "com.google.guava" % "guava" % "18.0", // string process etc. (snake case for example)
         "com.mohiva" %% "play-silhouette-testkit" % "3.0.0" % "test",
         "org.scalatestplus.play" %% "scalatestplus-play" % "1.5.0-RC1" % Test,
-        "com.typesafe.play" %% "play-slick" % "1.0.1",
-        "com.typesafe.play" %% "play-slick-evolutions" % "1.0.1",
+        "com.typesafe.play" %% "play-slick" % "1.1.1",
+        "com.typesafe.play" %% "play-slick-evolutions" % "1.1.1",
         "mysql" % "mysql-connector-java" % "5.1.36",
         "com.github.tototoshi" %% "slick-joda-mapper" % "2.1.0",
         "joda-time" % "joda-time" % "2.7",

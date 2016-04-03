@@ -40,4 +40,13 @@ angular.module('PlayTravelApp.filters', [])
             return timeFormated;
         };
     })
+    .filter('price', function () {
+        return function (price) {
+            var price = parseInt(price);
+            if (isNaN(price)) {
+                return price;
+            }
+            return price.toLocaleString();
+        };
+    })
 ;

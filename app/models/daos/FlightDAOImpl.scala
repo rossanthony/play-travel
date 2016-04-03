@@ -83,12 +83,11 @@ class FlightDAOImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProv
 //      )
 //    } yield flight
 
-
-    val actions = monadicJoin.result
-    val sql = actions.statements.head
+//    val actions = monadicJoin.result
+//    val sql = actions.statements.head
     //println(sql)
 
-    db.run(actions)
+    db.run(monadicJoin.result)
   }
 
 //  def getAllFlights = db.run(slickFlights.result)

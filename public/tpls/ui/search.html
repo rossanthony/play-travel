@@ -38,7 +38,7 @@
                 </span>
 
                 <span class="input-group">
-                    <md-time-picker mdp-auto-switch="true" ng-model="currentTime"></md-time-picker>
+                    <mdp-time-picker mdp-auto-switch="true" ng-model="currentTime"></mdp-time-picker>
                 </span>
             </div>
 
@@ -64,11 +64,11 @@
 
             <div class="form-row">
                 <span class="input-group">
-                    <input type="text" class="form-control" ng-click="" ng-model="query.departureLocation" placeholder="Departure location"/>
+                    <input type="text" class="form-control" ng-click="" ng-model="query.departureCity" placeholder="Departure location"/>
                 </span>
                 &nbsp;
                 <span class="input-group">
-                    <input type="text" class="form-control" ng-click="" ng-model="query.arrivalLocation" placeholder="Destination location"/>
+                    <input type="text" class="form-control" ng-click="" ng-model="query.arrivalCity" placeholder="Destination location"/>
                 </span>
             </div>
 
@@ -77,9 +77,59 @@
     </div>
 </div>
 
-<h3>Outbound</h3>
+
 
 <md-table-container>
+    <h3>Outbound</h3>
+    <table md-table md-row-select="options.rowSelection" ng-model="selected" md-progress="promise">
+        <thead md-head md-order="query.order" md-on-reorder="onReorder">
+        <tr md-row>
+            <th md-column><span>Flight no.</span></th>
+            <th md-column><span>Airline</span></th>
+            <th md-column><span>Departure city</span></th>
+            <th md-column md-order-by="departureLocation"><span>Departure airport</span></th>
+            <th md-column md-order-by="departureTime"><span>Departure date</span></th>
+            <th md-column md-order-by="departureTime"><span>Departure time</span></th>
+            <th md-column><span>Destination city</span></th>
+            <th md-column md-order-by="arrivalLocation"><span>Destination airport</span></th>
+            <th md-column md-order-by="arrivalTime"><span>Arrival date</span></th>
+            <th md-column md-order-by="arrivalTime"><span>Arrival time</span></th>
+            <th md-column md-order-by="economyCost">
+                <span>Economy</span>
+                <!-- @TODO add button to select economy seat for reservation (if there are available seats!) -->
+            </th>
+            <th md-column md-order-by="businessCost">
+                <span>Business</span>
+                <!-- @TODO add button to select economy seat for reservation (if there are available seats!) -->
+            </th>
+        </tr>
+        </thead>
+        <tbody md-body>
+        <tr md-row md-select="flight" md-select-id="{{flight.id}}" md-auto-select ng-repeat="flight in flights">
+            <td md-cell>{{flight._3.iata + (flight._1.flightNumber | numberFixedLen:3)}}</td>
+            <td md-cell>{{flight._3.airlineName}}</td>
+            <td md-cell>{{flight._4.cityName}} ({{flight._4.cityCode}})</td>
+            <td md-cell>{{flight._4.name}} ({{flight._4.code}})</td>
+            <td md-cell>{{flight._2.date}}</td>
+            <td md-cell>{{flight._1.departureTime | fourDigitTime}}</td>
+            <td md-cell>{{flight._5.cityName}} ({{flight._5.cityCode}})</td>
+            <td md-cell>{{flight._5.name}} ({{flight._5.code}})</td>
+            <td md-cell>{{flight._2.date}}</td>
+            <td md-cell>{{flight._1.arrivalTime | fourDigitTime}}</td>
+            <td md-cell>&pound;{{flight._1.economyCost | price}}</td>
+            <td md-cell>&pound;{{flight._1.businessCost | price}}</td>
+        </tr>
+        </tbody>
+    </table>
+</md-table-container>
+
+<!-- @TODO sort out pagination...
+<md-table-pagination md-limit="query.limit" md-page="query.page" md-total="{{flights.count}}" md-on-paginate="onPaginate" md-page-select></md-table-pagination>
+-->
+
+
+<md-table-container>
+    <h3>Inbound</h3>
     <table md-table md-row-select="options.rowSelection" ng-model="selected" md-progress="promise">
         <thead md-head md-order="query.order" md-on-reorder="onReorder">
         <tr md-row>
@@ -89,19 +139,31 @@
             <th md-column md-order-by="departureTime"><span>Departure time</span></th>
             <th md-column md-order-by="arrivalLocation"><span>Destination location</span></th>
             <th md-column md-order-by="arrivalTime"><span>Destination time</span></th>
+            <th md-column md-order-by="economyCost"><span>Economy</span></th>
+            <th md-column md-order-by="businessCost"><span>Business</span></th>
         </tr>
         </thead>
         <tbody md-body>
-        <tr md-row md-select="flight" md-select-id="{{flight.id}}" md-auto-select ng-repeat="flight in flights">
+        <tr md-row md-select="flight" md-select-id="{{flight.id}}" md-auto-select ng-repeat="flight in returnFlights">
             <td md-cell>{{flight._3.iata + (flight._1.flightNumber | numberFixedLen:3)}}</td>
             <td md-cell>{{flight._3.airlineName}}</td>
             <td md-cell>{{flight._4.code}}</td>
             <td md-cell>{{flight._1.departureTime | fourDigitTime}}</td>
             <td md-cell>{{flight._5.code}}</td>
             <td md-cell>{{flight._1.arrivalTime | fourDigitTime}}</td>
+            <td md-cell>&pound;{{flight._1.economyCost | price}}</td>
+            <td md-cell>&pound;{{flight._1.businessCost | price}}</td>
         </tr>
         </tbody>
     </table>
 </md-table-container>
 
-<md-table-pagination md-limit="query.limit" md-page="query.page" md-total="{{flights.count}}" md-on-paginate="onPaginate" md-page-select></md-table-pagination>
+
+<md-toolbar class="md-table-toolbar alternate" ng-show="selected.length">
+    <div class="md-toolbar-tools" layout-align="space-between">
+        <div>{{selected.length}} {{selected.length > 1 ? 'items' : 'item'}} selected</div>
+        <md-button class="md-icon-button" ng-click="delete($event)">
+            <md-icon>delete</md-icon>
+        </md-button>
+    </div>
+</md-toolbar>

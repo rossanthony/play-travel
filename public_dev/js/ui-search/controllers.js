@@ -26,7 +26,7 @@ angular.module('PlayTravelApp.ui-search.controllers', [])
         };
 
         $scope.query = {
-            order: 'departureLocation',
+            order: '',
             limit: 5,
             page: 1,
             departureDate: ''

@@ -147,6 +147,7 @@ gulp.task('vendor-css', function() {
             //'bower_components/angular-material/modules/js/checkbox/checkbox.min.css',
             //'bower_components/angular-material/modules/js/switch/switch.min.css',
             //'bower_components/angular-material/modules/js/sidenav/sidenav.min.css',
+            'bower_components/mdPickers/dist/mdPickers.min.css',
             'bower_components/ui-select/dist/select.min.css',
             'bower_components/angular-toastr/dist/angular-toastr.min.css',
             'bower_components/angular-loading-bar/build/loading-bar.min.css',

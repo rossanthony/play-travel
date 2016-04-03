@@ -10,9 +10,13 @@ GET     /api/v1/auth/user      controllers.auth.AuthorizationController.getMe
 GET     /api/v1/flight/search      controllers.FlightController.search
 GET     /api/v1/flight             controllers.FlightController.getAllFlights
 GET     /api/v1/flight/:id         controllers.FlightController.getFlight(id:Int)
-
-# Authorised Admin only routes
+# Authorised Admin only route
 DELETE  /api/v1/flight/:id         controllers.FlightController.deleteFlight(id:Int)
+
+
+GET     /api/v1/scheduled-flight   controllers.ScheduledFlightController.getAllScheduledFlights
+
+
 #POST    /api/v1/flight             controllers.FlightController.createFlight
 #PUT     /api/v1/flight/:id             controllers.FlightController.updateFlight(id:Int)
 
@@ -21,7 +25,6 @@ GET     /api/v1/airport             controllers.AirportController.getAllAirports
 
 
 GET     /assets/*file       controllers.Assets.at(path="/public", file)
-
 
 # All other front-end routes are handled on the client side by Angular.js
 # therefore we can serve up the default HTML no matter what route is requested.

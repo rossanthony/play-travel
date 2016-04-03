@@ -18,6 +18,7 @@ angular.module('PlayTravelApp', [
     'mgcrea.ngStrap',
     'ngMaterial',
     'md.data.table',
+    'mdPickers',
 
     //App
     'PlayTravelApp.controllers',

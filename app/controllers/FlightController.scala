@@ -3,6 +3,7 @@ package controllers
 import java.text.SimpleDateFormat
 import javax.inject.Inject
 
+import play.api.libs.functional.syntax._
 import com.mohiva.play.silhouette.api.{ Environment, Silhouette }
 import com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticator
 import com.mohiva.play.silhouette.impl.providers.SocialProviderRegistry
@@ -14,7 +15,7 @@ import utils.StringHelper.ToJson
 import play.api.mvc._
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
-import play.api.libs.json.{JsValue, JsObject, JsArray, Json}
+import play.api.libs.json._
 import java.sql.Date
 
 /**
@@ -119,14 +120,26 @@ class FlightController @Inject() (
 //      }
 //    }
 
-    // @TODO add other optional filter params, departure/arrival date/time, etc...
+    // @TODO add other optional filter params: time, number of passengers, max num of stops
+
+    // Define mapping for Vector returned from search Future...
+
+    val itemWrites: OWrites[(Flight, ScheduledFlight, Airline, Airport, Airport)] = (
+        (__ \ "flight").write[Flight] and
+        (__ \ "scheduledFlight").write[ScheduledFlight] and
+        (__ \ "airline").write[Airline] and
+        (__ \ "departureAirport").write[Airport] and
+        (__ \ "destinationAirport").write[Airport]
+      ).tupled
+
+    val resultWrites: Writes[Seq[(Flight, ScheduledFlight, Airline, Airport, Airport)]] = Writes.seq(itemWrites)
 
     flightService.search(departureCity, arrivalCity, departureDate).map(results => {
       Ok(
-        Map[String, Any](
-          "status" -> "OK",
-          "data" -> results
-        ).toJson
+        Json.obj(
+          "status" -> "Ok",
+          "data" -> resultWrites.writes(results)
+        )
       ).as("application/json")
     })
   }

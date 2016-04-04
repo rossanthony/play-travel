@@ -1,6 +1,6 @@
 package models.daos
 
-import models.{FlightSearchResult, Flight}
+import models.Flight
 import play.api.Logger
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import javax.inject.Inject
@@ -55,7 +55,7 @@ class FlightDAOImpl @Inject()(protected val dbConfigProvider: DatabaseConfigProv
 
     val monadicJoin = for {
       sf <- slickScheduledFlights.filter(a =>
-              departureDate.map(d => a.date === d).getOrElse(slick.lifted.LiteralColumn(true))
+              departureDate.map(d => a.departureDate === d).getOrElse(slick.lifted.LiteralColumn(true))
             )
       fl <- slickFlights if sf.flightId === fl.id
       al <- slickAirlines if fl.airlineId === al.id

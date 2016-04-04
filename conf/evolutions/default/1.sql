@@ -16,7 +16,7 @@ create table `user` (
   `cardType` VARCHAR(254) DEFAULT NULL,
   `cardNumber` INTEGER DEFAULT NULL,
   `expDate` INTEGER DEFAULT NULL,
-  `isAdmin` tinyint(1),
+  `isAdmin` tinyint(1) DEFAULT 1,
   PRIMARY KEY (`userID`)
 );
 

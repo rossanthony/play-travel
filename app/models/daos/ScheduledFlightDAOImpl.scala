@@ -31,9 +31,11 @@ class ScheduledFlightDAOImpl @Inject()(protected val dbConfigProvider: DatabaseC
         ScheduledFlight(
           scheduledFlight.id,
           scheduledFlight.flightId,
-          scheduledFlight.date,
+          scheduledFlight.departureDate,
+          scheduledFlight.arrivalDate,
           scheduledFlight.economySeats,
-          scheduledFlight.businessSeats
+          scheduledFlight.businessSeats,
+          scheduledFlight.isCancelled
         )
       }
     }
@@ -51,9 +53,11 @@ class ScheduledFlightDAOImpl @Inject()(protected val dbConfigProvider: DatabaseC
     val dbScheduledFlight = ScheduledFlight(
       scheduledFlight.id,
       scheduledFlight.flightId,
-      scheduledFlight.date,
+      scheduledFlight.departureDate,
+      scheduledFlight.arrivalDate,
       scheduledFlight.economySeats,
-      scheduledFlight.businessSeats
+      scheduledFlight.businessSeats,
+      scheduledFlight.isCancelled
     )
 
     // combine database actions to be run sequentially

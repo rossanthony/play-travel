@@ -39,10 +39,12 @@ trait DBTableDefinitions {
   class ScheduledFlights(tag: Tag) extends Table[ScheduledFlight](tag, "scheduled_flight") {
     def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
     def flightId = column[Int]("flightId")
-    def date = column[Date]("date")
+    def departureDate = column[Date]("departureDate")
+    def arrivalDate = column[Date]("arrivalDate")
     def economySeats = column[Int]("economySeats")
     def businessSeats = column[Int]("businessSeats")
-    def * = (id.?, flightId, date, economySeats, businessSeats) <> ((ScheduledFlight.apply _).tupled, ScheduledFlight.unapply)
+    def isCancelled = column[Boolean]("isCancelled")
+    def * = (id.?, flightId, departureDate, arrivalDate, economySeats, businessSeats, isCancelled) <> ((ScheduledFlight.apply _).tupled, ScheduledFlight.unapply)
     // Relations
     def flight = foreignKey("flight_fk", flightId, slickFlights)(_.id)
   }

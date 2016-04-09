@@ -168,3 +168,36 @@ a {
 .md-light {
     color: white;
 }
+
+
+/* ==========  Select Field Variables ========== */
+$color-black: "0,0,0";
+$select-background-color: transparent;
+$select-border-color: unquote("rgba(#{$color-black}, 0.12)") !default;
+$select-font-size: 16px;
+$select-color: unquote("rgba(#{$color-black}, 0.26)") !default;
+$select-padding: 4px;
+
+/* ==========  Select Field ========== */
+
+/* Style Select Field */
+select {
+    font-family: inherit;
+    background-color: transparent;
+    width: 100%;
+    padding: $select-padding 0;
+    font-size: $select-font-size;
+    color: $select-color;
+    border: none;
+    border-bottom: 1px solid $select-border-color;
+    max-width: 200px;
+}
+
+/* Remove focus */
+select:focus {
+    outline: none}
+
+
+.form-row {
+    margin: 20px 0 0 0;
+}

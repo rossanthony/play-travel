@@ -13,9 +13,20 @@
         <!--<form name="searchForm" ng-model="searchForm" ng-submit="submit()">-->
         <form flex name="filter.form">
 
-            <div class="form-group checkbox">
-                <input type="checkbox" id="return" checked="checked" />
+            <div class="form-row checkbox">
                 <label for="return">Return</label>
+                &nbsp; <input type="checkbox" id="return" checked="checked" />
+            </div>
+
+            <div class="form-row select">
+                <!-- Standard Select -->
+                <div class="mdl-selectfield">
+                    <label for="class">Cabin class</label> &nbsp;
+                    <select id="class" name="class" class="browser-default">
+                        <option value="economy" selected>Economy</option>
+                        <option value="business">Business</option>
+                    </select>
+                </div>
             </div>
 
             <div class="form-row">
@@ -31,6 +42,7 @@
                             datepicker-options="dateOptions"
                             close-text="Close"
                             placeholder="Departure date"
+                            readonly
                     />
                     <span class="input-group-btn">
                         <button type="button" class="btn btn-link" ng-click="datepicker1 = !datepicker1"><i class="fa fa-calendar"></i></button>
@@ -55,9 +67,10 @@
                             datepicker-options="dateOptions"
                             close-text="Close"
                             placeholder="Return date"
+                            readonly
                     />
                     <span class="input-group-btn">
-                        <button type="button" class="btn btn-link"><i class="fa fa-calendar"></i></button>
+                        <button type="button" class="btn btn-link" ng-click="datepicker2 = !datepicker2"><i class="fa fa-calendar"></i></button>
                     </span>
                 </span>
             </div>
@@ -84,40 +97,26 @@
     <table md-table md-row-select="options.rowSelection" ng-model="selected" md-progress="promise">
         <thead md-head md-order="query.order" md-on-reorder="onReorder">
         <tr md-row>
-            <th md-column><span>Flight no.</span></th>
-            <th md-column><span>Airline</span></th>
-            <th md-column><span>Departure city</span></th>
-            <th md-column md-order-by="departureLocation"><span>Departure airport</span></th>
-            <th md-column md-order-by="departureTime"><span>Departure date</span></th>
-            <th md-column md-order-by="departureTime"><span>Departure time</span></th>
-            <th md-column><span>Destination city</span></th>
-            <th md-column md-order-by="arrivalLocation"><span>Destination airport</span></th>
-            <th md-column md-order-by="arrivalTime"><span>Arrival date</span></th>
-            <th md-column md-order-by="arrivalTime"><span>Arrival time</span></th>
-            <th md-column md-order-by="economyCost">
-                <span>Economy</span>
-                <!-- @TODO add button to select economy seat for reservation (if there are available seats!) -->
-            </th>
-            <th md-column md-order-by="businessCost">
-                <span>Business</span>
-                <!-- @TODO add button to select economy seat for reservation (if there are available seats!) -->
-            </th>
+            <th md-column><span>Airline / Flight no.</span></th>
+            <th md-column><span>Departure location</span></th>
+            <th md-column md-order-by="departureTime"><span>Departure date/time</span></th>
+            <th md-column><span>Destination location</span></th>
+            <th md-column md-order-by="arrivalTime"><span>Arrival date/time</span></th>
+            <th md-column md-order-by="economyCost"><span>Price</span></th>
         </tr>
         </thead>
         <tbody md-body>
         <tr md-row md-select="flight" md-select-id="{{flight.id}}" md-auto-select ng-repeat="flight in flights">
-            <td md-cell>{{flight.airline.iata + (flight.flight.flightNumber | numberFixedLen:3)}}</td>
-            <td md-cell>{{flight.airline.airlineName}}</td>
-            <td md-cell>{{flight.departureAirport.cityName}} ({{flight.departureAirport.cityCode}})</td>
-            <td md-cell>{{flight.departureAirport.name}} ({{flight.departureAirport.code}})</td>
-            <td md-cell>{{flight.scheduledFlight.departureDate}}</td>
-            <td md-cell>{{flight.flight.departureTime | fourDigitTime}}</td>
-            <td md-cell>{{flight.destinationAirport.cityName}} ({{flight.destinationAirport.cityCode}})</td>
-            <td md-cell>{{flight.destinationAirport.name}} ({{flight.destinationAirport.code}})</td>
-            <td md-cell>{{flight.scheduledFlight.arrivalDate}}</td>
-            <td md-cell>{{flight.flight.arrivalTime | fourDigitTime}}</td>
-            <td md-cell>&pound;{{flight.flight.economyCost | price}}</td>
-            <td md-cell>&pound;{{flight.flight.businessCost | price}}</td>
+            <td md-cell>{{flight.airline.airlineName}}<br>{{flight.airline.iata + (flight.flight.flightNumber | numberFixedLen:3)}}</td>
+            <td md-cell>{{flight.departureAirport.cityName}}<br>{{flight.departureAirport.name}} ({{flight.departureAirport.code}})</td>
+            <td md-cell>{{flight.scheduledFlight.departureDate}} {{flight.flight.departureTime | fourDigitTime}}</td>
+            <td md-cell>{{flight.destinationAirport.cityName}}<br>{{flight.destinationAirport.name}} ({{flight.destinationAirport.code}})</td>
+            <td md-cell>{{flight.scheduledFlight.arrivalDate}} {{flight.flight.arrivalTime | fourDigitTime}}</td>
+            <td md-cell>
+                Economy: &pound;{{flight.flight.economyCost | price}}<br>
+                Business: &pound;{{flight.flight.businessCost | price}}
+                <!-- @TODO add buttons/dropdown to select seat(s) for reservation (if there are available seats!) -->
+            </td>
         </tr>
         </tbody>
     </table>

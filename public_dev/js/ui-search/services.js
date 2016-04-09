@@ -3,11 +3,17 @@
 /* Services */
 
 angular.module('PlayTravelApp.ui-search.services', [])
-    .factory('$flights', ['$resource', function ($resource) {
+    .factory('Flights', ['$resource', function ($resource) {
         return {
             flights: $resource('/api/v1/flight/search')
         };
     }])
+    .factory('Airports', ['$resource', function ($resource) {
+        return {
+            airports: $resource('/api/v1/airport/list')
+        };
+    }])
+
     //.factory('Search', ['$resource', function ($resource) {
     //    return $resource(
     //        '/api/v1/search/flight',

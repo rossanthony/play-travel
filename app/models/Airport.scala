@@ -25,3 +25,9 @@ object Airport {
   implicit val writer = Json.writes[Airport]
   implicit val reader = Json.reads[Airport]
 }
+
+case class AirportCityList(
+                    cityCode: String,
+                    cityName: String,
+                    countryName: String
+                  )

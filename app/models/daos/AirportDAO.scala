@@ -10,5 +10,5 @@ import scala.concurrent.Future
 trait AirportDAO {
   def list: Future[Seq[Airport]]
 
-  def listForSelect: Future[Seq[(String, String)]]
+  def listForSelect: Future[Seq[(String, String, String)]]
 }

@@ -19,9 +19,19 @@ class AirportDAOImpl @Inject()(protected val dbConfigProvider: DatabaseConfigPro
   def listForSelect = {
     val q = for {
       a <- slickAirports
-    } yield (a.name, a.cityName)
+    } yield (a.cityCode, a.cityName, a.countryName)
 
-    val action = q.result
-    db.run(action)
+    // @TODO figure out how to get groupBy working...
+    // the docs aren't very helpful... http://slick.typesafe.com/doc/3.0.3/sql-to-slick.html#group-by
+    // have submitted a question here: http://stackoverflow.com/questions/36520451/scala-slick-groupby-without-aggregation
+
+//    val q2 = q.groupBy(a => a._1).map{
+//      case (cityCode, group) => (cityCode, group.map(_._1))
+//    }
+
+//    val sql = action.statements.head
+//    println(sql)
+
+    db.run(q.result)
   }
 }

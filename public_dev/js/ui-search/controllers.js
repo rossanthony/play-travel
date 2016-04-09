@@ -3,7 +3,7 @@
 /* Controllers */
 
 angular.module('PlayTravelApp.ui-search.controllers', [])
-    .controller('SearchPageCtrl',['$scope', '$state','$flights', '$mdDialog', function ($scope, $state, $flights, $mdDialog) {
+    .controller('SearchPageCtrl',['$scope', '$state','Flights', '$mdDialog', function ($scope, $state, Flights, $mdDialog) {
 
         console.log('SearchPageCtrl');
 
@@ -56,7 +56,7 @@ angular.module('PlayTravelApp.ui-search.controllers', [])
                     + '-' + $scope.datepickers.returnDate.getDate().toString();
             }
             console.log('$scope.query', $scope.query);
-            $scope.promise = $flights.flights.get(query || $scope.query, success).$promise;
+            $scope.promise = Flights.flights.get(query || $scope.query, success).$promise;
         }
 
         function success(flights) {

@@ -21,5 +21,5 @@ trait AirportService {
     *
     * @return
     */
-  def listForSelect: Future[Seq[(String, String)]]
+  def listForSelect: Future[Seq[(String, String, String)]]
 }

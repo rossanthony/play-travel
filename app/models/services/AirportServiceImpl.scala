@@ -21,5 +21,5 @@ class AirportServiceImpl @Inject()(airportDAO: AirportDAO) extends AirportServic
     */
   def list: Future[Seq[Airport]] = airportDAO.list
 
-  def listForSelect: Future[Seq[(String, String)]] = airportDAO.listForSelect
+  def listForSelect: Future[Seq[(String, String, String)]] = airportDAO.listForSelect
 }

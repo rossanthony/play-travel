@@ -22,6 +22,7 @@ GET     /api/v1/scheduled-flight   controllers.ScheduledFlightController.getAllS
 
 GET     /api/v1/airline             controllers.AirlineController.getAllAirlines
 GET     /api/v1/airport             controllers.AirportController.getAllAirports
+GET     /api/v1/airport/list        controllers.AirportController.getAllAirportsList
 
 
 GET     /assets/*file       controllers.Assets.at(path="/public", file)

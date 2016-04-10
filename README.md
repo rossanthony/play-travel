@@ -17,6 +17,23 @@ Coursework submission for Birkbeck MSc module, [Component Based Software Develop
 - [AngularJS](https://angularjs.org/)
 - [Material Design Data Table](https://github.com/daniel-nagy/md-data-table)
 
+#### Build and run locally
+
+Firstly you will need to setup a local MySQL database and add the credentials in the config here: `conf/application.conf`.
+
+Assuming you already have SBT installed and the project cloned, it can be started locally by running: `sbt run` from the project root folder. By default it will fire up on 127.0.0.1:9000.
+
+Upon first loading the frontend page (or requesting one of the REST endpoints) the code will compile and Play will show a message regarding migrations (or evolutions as Play calls them) which need to be run, just click the red button and let Play do its magic. (for reference the migration SQL scripts can be found here: `conf/evolutions/default/*`)
+
+Once the migrations have run, then you will need to add some seed data to test with (a test user, flights etc) these will need to be imported into your database manually (via something like SequelPro). The seed SQL scripts can be found in: `conf/seeds/*` (import all .sql files in this folder).
+
+The seed data includes a user with the following credentials:
+```
+username: r@a.com
+password: pw123
+```
+which can be tested on the login page: [http://127.0.0.1:9000/auth/sign-in](http://127.0.0.1:9000/auth/sign-in)
+
 #### Progress
 
 Unfortunately despite having devoted around two solid weeks to this project (spread out over several months) I have been unable to meet all of the requirements. Being relatively new to Scala and completely new to Play + Slick, I found it particular challenging to get all of the required elements of the coursework completed. The parts I have managed to get working are as follows:
